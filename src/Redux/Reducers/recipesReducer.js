@@ -1,9 +1,17 @@
-import { GET_DRINKS, GET_MEALS, IS_REQUESTING } from '../Actions';
+import {
+  GET_DRINKS,
+  GET_MEALS,
+  IS_REQUESTING,
+  GET_LIST_CATEGORIES_DRINKS,
+  GET_LIST_CATEGORIES_MEALS,
+} from '../Actions';
 
 const INITIAL_STATE = {
   isRequesting: false,
   drinks: [],
   meals: [],
+  categoriesMeals: [],
+  categoriesDrinks: [],
 };
 
 function recipes(state = INITIAL_STATE, { payload, type }) {
@@ -13,10 +21,21 @@ function recipes(state = INITIAL_STATE, { payload, type }) {
       ...state,
       isRequesting: true,
     };
+  case GET_LIST_CATEGORIES_DRINKS:
+    return {
+      ...state,
+      categoriesDrinks: payload,
+    };
+  case GET_LIST_CATEGORIES_MEALS:
+    return {
+      ...state,
+      categoriesMeals: payload,
+    };
   case GET_DRINKS:
     return {
       ...state,
       drinks: payload,
+      isRequesting: false,
     };
   case GET_MEALS:
     return {

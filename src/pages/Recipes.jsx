@@ -6,7 +6,15 @@ import CardDrink from '../Components/CardDrink';
 import CardMeal from '../Components/CardMeal';
 
 const QUANTITY_OF_RECIPES = 12;
-function Recipes({ dispatch, history, drinks, meals }) {
+const QUANTITY_OF_CATEGORIES = 5;
+function Recipes({
+  dispatch,
+  history,
+  drinks,
+  meals,
+  categoriesDrinks,
+  categoriesMeals,
+}) {
   const { pathname } = history.location;
   useEffect(() => {
     if (pathname === '/drinks') {
@@ -17,6 +25,29 @@ function Recipes({ dispatch, history, drinks, meals }) {
   }, [dispatch, pathname]);
   return (
     <div>
+      <section>
+        { pathname === '/drinks'
+          ? categoriesDrinks
+            .filter((e, index) => index < QUANTITY_OF_CATEGORIES)
+            .map(({ strCategory: categorie }) => (
+              <button
+                type="button"
+                data-testid={ `${categorie}-category-filter` }
+                key={ categorie }
+              >
+                { categorie }
+              </button>))
+          : categoriesMeals
+            .filter((e, index) => index < QUANTITY_OF_CATEGORIES)
+            .map(({ strCategory: categorie }) => (
+              <button
+                type="button"
+                key={ categorie }
+                data-testid={ `${categorie}-category-filter` }
+              >
+                { categorie }
+              </button>))}
+      </section>
       { pathname === '/drinks'
         ? drinks
           .filter((e, index) => index < QUANTITY_OF_RECIPES)
@@ -41,11 +72,19 @@ Recipes.propTypes = {
     }),
   }),
   dispatch: func,
+  categoriesMeals: shape({
+    strCategory: string,
+  }),
+  categoriesDrinks: shape({
+    strCategory: string,
+  }),
 }.isRequired;
 
 const mapStateToProps = ({ recipes }) => ({
   drinks: recipes.drinks,
   meals: recipes.meals,
+  categoriesMeals: recipes.categoriesMeals,
+  categoriesDrinks: recipes.categoriesDrinks,
 });
 
 export default connect(mapStateToProps)(Recipes);
