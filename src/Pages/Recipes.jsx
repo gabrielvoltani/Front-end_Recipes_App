@@ -19,13 +19,13 @@ function Recipes({ dispatch, history, drinks, meals }) {
     <div>
       { pathname === '/drinks'
         ? drinks
-          .filter((el, index) => index < QUANTITY_OF_RECIPES)
+          .filter((e, index) => index < QUANTITY_OF_RECIPES)
           .map((drink, ind) => (
             <div key={ drink.idDrink }>
               <CardDrink index={ ind } infoDrink={ drink } />
             </div>))
         : meals
-          .filter((el, index) => index < QUANTITY_OF_RECIPES)
+          .filter((e, index) => index < QUANTITY_OF_RECIPES)
           .map((meal, ind) => (
             <div key={ meal.idMeal }>
               <CardMeal index={ ind } infoMeal={ meal } />
