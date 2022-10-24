@@ -9,8 +9,11 @@ function Login() {
     if (name === 'password') setPassword(value);
   };
 
+  const emailIsValid = email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  const minLengthPassword = 6;
+
   return (
-    <div>
+    <form>
       <input
         type="text"
         data-testid="email-input"
@@ -26,9 +29,15 @@ function Login() {
         onChange={ handleInput }
       />
       <div>
-        <button type="button" data-testid="login-submit-btn">Enter</button>
+        <button
+          type="button"
+          data-testid="login-submit-btn"
+          disabled={ !(emailIsValid && password.length > minLengthPassword) }
+        >
+          Enter
+        </button>
       </div>
-    </div>
+    </form>
   );
 }
 
