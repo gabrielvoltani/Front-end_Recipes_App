@@ -1,10 +1,9 @@
 import React from 'react';
 import './App.css';
 import { Switch, Route } from 'react-router-dom';
-import Recipes from './Pages/Recipes';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Login from './pages/Login';
 import Recipes from './pages/Recipes';
+import Login from './pages/Login';
 
 function App() {
   return (
