@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { setUser } from '../services/localStorage';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -33,6 +34,7 @@ function Login() {
           type="button"
           data-testid="login-submit-btn"
           disabled={ !(emailIsValid && password.length > minLengthPassword) }
+          onClick={ () => setUser({ email }) }
         >
           Enter
         </button>
