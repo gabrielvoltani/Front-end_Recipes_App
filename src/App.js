@@ -4,13 +4,14 @@ import { Switch, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './pages/Login';
 import Recipes from './pages/Recipes';
+import Profile from './pages/Profile';
 
 function App() {
   return (
     <Switch>
       <Route exact path="/" component={ Login } />
-      <Route path="/profile" />
-      <Route exact path="/drinks" />
+      <Route path="/profile" component={ Profile } />
+      <Route exact path="/drinks" component={ Recipes } />
       <Route path="/drinks/:id-da-receita" />
       <Route path="/drinks/:id-da-receita/in-progress" />
       <Route exact path="/meals" component={ Recipes } />

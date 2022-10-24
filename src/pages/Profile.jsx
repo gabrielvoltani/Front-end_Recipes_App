@@ -1,10 +1,10 @@
 import React from 'react';
 import Footer from '../components/Footer';
 
-export default function Recipes() {
+export default function Profile() {
   return (
     <main>
-      <div>Recipes</div>
+      <div>Profile</div>
       <Footer />
     </main>
   );
