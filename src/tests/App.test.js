@@ -2,6 +2,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../App';
+import Footer from '../components/Footer';
 import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 
 describe('Testes do App', () => {
@@ -51,5 +52,21 @@ describe('Testes do App', () => {
 
     const { pathname } = history.location;
     expect(pathname).toBe('/meals');
+  });
+
+  test('01 - Testa se o Footer tem os ids', () => {
+    renderWithRouterAndRedux(<Footer />);
+    const footerId = screen.getByTestId('footer');
+    const mealId = screen.getByTestId('meals-bottom-btn');
+    const drinkId = screen.getByTestId('drinks-bottom-btn');
+    expect(mealId).toBeInTheDocument();
+    expect(drinkId).toBeInTheDocument();
+    expect(footerId).toBeInTheDocument();
+  });
+  test('02 - Testa se os textos alternativos das imagens estão presentes', () => {
+    renderWithRouterAndRedux(<Footer />);
+    const mealImg = screen.getByAltText(/Meal Icon/i);
+
+    expect(mealImg).toBeInTheDocument();
   });
 });
