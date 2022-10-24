@@ -4,6 +4,7 @@ import { string, shape, func } from 'prop-types';
 import { thunkRequestDrinks, thunkRequestMeals } from '../Redux/Actions/index';
 import CardDrink from '../Components/CardDrink';
 import CardMeal from '../Components/CardMeal';
+import Footer from '../components/Footer';
 
 const QUANTITY_OF_RECIPES = 12;
 const QUANTITY_OF_CATEGORIES = 5;
@@ -61,6 +62,7 @@ function Recipes({
             <div key={ meal.idMeal }>
               <CardMeal index={ ind } infoMeal={ meal } />
             </div>))}
+          <Footer />
     </div>
   );
 }
