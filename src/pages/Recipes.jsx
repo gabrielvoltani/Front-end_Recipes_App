@@ -62,7 +62,7 @@ function Recipes({
             <div key={ meal.idMeal }>
               <CardMeal index={ ind } infoMeal={ meal } />
             </div>))}
-          <Footer />
+      <Footer />
     </div>
   );
 }
