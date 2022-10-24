@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { func } from 'prop-types';
 import { setUser } from '../services/localStorage';
 
-function Login() {
+function Login({ history }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,6 +13,11 @@ function Login() {
 
   const emailIsValid = email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   const minLengthPassword = 6;
+
+  const handleSubmit = () => {
+    setUser({ email });
+    history.push('/meals');
+  };
 
   return (
     <form>
@@ -34,7 +40,7 @@ function Login() {
           type="button"
           data-testid="login-submit-btn"
           disabled={ !(emailIsValid && password.length > minLengthPassword) }
-          onClick={ () => setUser({ email }) }
+          onClick={ handleSubmit }
         >
           Enter
         </button>
@@ -42,5 +48,9 @@ function Login() {
     </form>
   );
 }
+
+Login.propTypes = {
+  history: func.isRequired,
+};
 
 export default Login;
