@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { string, shape, func } from 'prop-types';
 import { thunkRequestDrinks, thunkRequestMeals } from '../Redux/Actions/index';
+import Header from '../components/Header';
 import CardDrink from '../Components/CardDrink';
 import CardMeal from '../Components/CardMeal';
 import Footer from '../components/Footer';
@@ -26,6 +27,7 @@ function Recipes({
   }, [dispatch, pathname]);
   return (
     <div>
+      <Header history={ history } />
       <section>
         { pathname === '/drinks'
           ? categoriesDrinks

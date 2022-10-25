@@ -1,19 +1,17 @@
 import React from 'react';
 import { string } from 'prop-types';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
 
-function Profile({ history }) {
+function DoneRecipes({ history }) {
   return (
     <main>
       <Header history={ history } />
-      <Footer />
     </main>
   );
 }
 
-Profile.propTypes = {
+DoneRecipes.propTypes = {
   history: string,
 }.isRequired;
 
-export default Profile;
+export default DoneRecipes;
