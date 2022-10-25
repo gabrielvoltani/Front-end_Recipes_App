@@ -5,7 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './pages/Login';
 import Recipes from './pages/Recipes';
 import Profile from './pages/Profile';
-import Drinks from './pages/Drinks';
 import FavoriteRecipes from './pages/FavoriteRecipes';
 import DoneRecipes from './pages/DoneRecipes';
 
@@ -14,7 +13,7 @@ function App() {
     <Switch>
       <Route exact path="/" component={ Login } />
       <Route path="/profile" component={ Profile } />
-      <Route exact path="/drinks" component={ Drinks } />
+      <Route exact path="/drinks" component={ Recipes } />
       <Route path="/drinks/:id-da-receita" />
       <Route path="/drinks/:id-da-receita/in-progress" />
       <Route exact path="/meals" component={ Recipes } />
