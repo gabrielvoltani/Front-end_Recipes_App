@@ -9,6 +9,7 @@ import {
 } from '../Redux/Actions/index';
 import CardFood from '../components/CardFood';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 const QUANTITY_OF_RECIPES = 12;
 const QUANTITY_OF_CATEGORIES = 5;
@@ -101,6 +102,7 @@ function Recipes({
 
   return (
     <div>
+      <Header history={ history } />
       <section>
         { categoriesList
           .filter((e, index) => index < QUANTITY_OF_CATEGORIES)
