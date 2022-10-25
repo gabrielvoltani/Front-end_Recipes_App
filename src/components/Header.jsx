@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { string } from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,8 @@ import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 
 function Header({ history }) {
+  const [toggle, setToggle] = useState(false);
+
   const { pathname } = history.location;
 
   const verifyPathName = () => {
@@ -35,7 +37,22 @@ function Header({ history }) {
       {pathname === '/meals' || pathname === '/drinks'
         ? (
           <div>
-            <img alt="Foto profile" data-testid="search-top-btn" src={ searchIcon } />
+            <button
+              type="button"
+              alt="Search icon"
+              data-testid="search-top-btn"
+              onClick={ () => setToggle(!toggle) }
+            >
+              <img src={ searchIcon } alt="search" />
+            </button>
+            {toggle
+              ? (
+                <input
+                  type="text"
+                  placeholder="Pesquise Aqui"
+                  data-testid="search-input"
+                />
+              ) : null}
           </div>
         )
         : (
@@ -50,8 +67,3 @@ Header.propTypes = {
 }.isRequired;
 
 export default connect()(Header);
-
-// Mudar para a rota /profile quando clicar no link - OK
-// 45% de teste do header
-
-// Botão de busca aparece e desaparece quando clica no ícone
