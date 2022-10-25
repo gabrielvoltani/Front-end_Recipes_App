@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { string, shape, func } from 'prop-types';
 import { thunkRequestDrinks, thunkRequestMeals } from '../Redux/Actions/index';
-import CardDrink from '../Components/CardDrink';
-import CardMeal from '../Components/CardMeal';
+import CardDrink from '../components/CardDrink';
+import CardMeal from '../components/CardMeal';
 import Footer from '../components/Footer';
 
 const QUANTITY_OF_RECIPES = 12;
