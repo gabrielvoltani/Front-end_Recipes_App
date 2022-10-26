@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { string, shape, func, bool } from 'prop-types';
@@ -22,13 +22,17 @@ function Recipes({
   categoriesDrinks,
   categoriesMeals,
 }) {
+  const [renderDidMount, setRenderDidMount] = useState(true);
   const [renderListFoods, setRenderListFoods] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
   const [actualType, setActualType] = useState('All');
   const { pathname } = history.location;
 
-  const dispatchActionsFoods = useCallback(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const dispatchActionsFoods = async () => {
+    await dispatch(thunkRequestDrinks());
+    await dispatch(thunkRequestMeals());
     if (pathname === '/drinks') {
       setRenderListFoods(drinks);
       setCategoriesList([{ strCategory: 'All' }, ...categoriesDrinks]);
@@ -36,25 +40,33 @@ function Recipes({
       setRenderListFoods(meals);
       setCategoriesList([{ strCategory: 'All' }, ...categoriesMeals]);
     }
+  };
+
+  useEffect(() => {
+    setRenderDidMount(true);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (renderDidMount) {
+      const callDispatchActionFoods = async () => {
+        await dispatchActionsFoods();
+      };
+      callDispatchActionFoods();
+      if (renderListFoods.length > 0 && categoriesList.length > 0) {
+        setRenderDidMount(false);
+      }
+    }
   }, [
+    renderDidMount,
+    dispatchActionsFoods,
+    categoriesList,
+    renderListFoods,
+    dispatch,
     categoriesDrinks,
     categoriesMeals,
-    drinks,
-    meals,
     pathname,
-  ]);
-
-  useEffect(() => {
-    const requestApis = async () => {
-      await dispatch(thunkRequestDrinks());
-      await dispatch(thunkRequestMeals());
-    };
-    requestApis();
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatchActionsFoods();
-  }, [pathname, dispatchActionsFoods]);
+    drinks,
+    meals]);
 
   useEffect(() => {
     if (isFiltering) {
@@ -66,20 +78,21 @@ function Recipes({
           await dispatch(thunkRequestApiFilterByCategoryMeal(actualType));
           setRenderListFoods(meals);
         } else {
-          dispatchActionsFoods();
+          await dispatchActionsFoods();
         }
         setIsFiltering(false);
       };
       filterFoods();
     }
   }, [
-    isFiltering,
-    actualType,
-    drinks,
-    dispatch,
-    meals,
     dispatchActionsFoods,
+    renderListFoods,
+    actualType,
+    isFiltering,
     pathname,
+    dispatch,
+    drinks,
+    meals,
   ]);
 
   const handleClickFilter = async (type) => {

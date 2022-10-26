@@ -17,6 +17,7 @@ function SearchBar() {
             type="radio"
             name="filter"
             value={ title }
+            checked={ filterRadio === title }
             onClick={ ({ target }) => setFilterRadio(target.value) }
             data-testid={ idTests[i] }
           />
