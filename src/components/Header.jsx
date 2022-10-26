@@ -19,7 +19,6 @@ function Header({ history }) {
     }
     return pathname.slice(1)[0].toUpperCase() + pathname.slice(2);
   };
-
   return (
     <header>
       <div>
@@ -40,6 +39,7 @@ function Header({ history }) {
             <button
               type="button"
               alt="Search icon"
+              src={ searchIcon }
               data-testid="search-top-btn"
               onClick={ () => setToggle(!toggle) }
             >
@@ -61,7 +61,6 @@ function Header({ history }) {
     </header>
   );
 }
-
 Header.propTypes = {
   history: string,
 }.isRequired;
