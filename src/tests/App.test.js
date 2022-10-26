@@ -6,10 +6,7 @@ import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import App from '../App';
 import Footer from '../components/Footer';
 
-import mockCategoriesMeals from './mocks/categoriesMeals';
-import mockCategoriesDrinks from './mocks/categoriesDrinks';
-import mockMeals from './mocks/meals';
-import mockDrinks from './mocks/drinks';
+import fetch from './mocks/fetchMock';
 
 const loginButton = 'login-submit-btn';
 const emailInputId = 'email-input';
@@ -85,9 +82,7 @@ describe('Testes do component Footer', () => {
 
 describe('Testes da page Recipes', () => {
   test('01 - verifica se as 5 primeiras categorias de meals são exibidas corretamente', async () => {
-    global.fetch = jest.fn(() => Promise.resolve({
-      json: () => Promise.resolve(mockCategoriesMeals),
-    }));
+    global.fetch = jest.fn(fetch);
 
     const { history } = renderWithRouterAndRedux(<App />);
     const loginSubmitButton = screen.getByTestId(loginButton);
@@ -109,9 +104,7 @@ describe('Testes da page Recipes', () => {
   });
 
   test('02 - verifica se as 12 primeiras comidas são exibidas corretamente', async () => {
-    global.fetch = jest.fn(() => Promise.resolve({
-      json: () => Promise.resolve(mockMeals),
-    }));
+    global.fetch = jest.fn(fetch);
 
     const { history } = renderWithRouterAndRedux(<App />);
     const loginSubmitButton = screen.getByTestId(loginButton);
@@ -124,7 +117,6 @@ describe('Testes da page Recipes', () => {
 
     const { pathname } = history.location;
     expect(pathname).toBe('/meals');
-    expect(fetch).toHaveBeenCalled();
 
     const corba = await screen.findByText(/Corba/i);
     expect(corba).toBeInTheDocument();
@@ -134,9 +126,7 @@ describe('Testes da page Recipes', () => {
   });
 
   test('03 - verifica se as 5 primeiras categorias de drinks são exibidas corretamente', async () => {
-    global.fetch = () => Promise.resolve({
-      json: () => Promise.resolve(mockCategoriesDrinks),
-    });
+    global.fetch = jest.fn(fetch);
 
     const { history } = renderWithRouterAndRedux(<App />);
     const loginSubmitButton = screen.getByTestId(loginButton);
@@ -157,13 +147,11 @@ describe('Testes da page Recipes', () => {
     expect(category.length).toBe(5);
 
     const twelveMeals = await screen.findAllByTestId(/-card-name/i);
-    expect(twelveMeals.length).toBe(11);
+    expect(twelveMeals.length).toBe(12);
   });
 
   test('04 - verifica se as 12 primeiras bebidas são exibidas corretamente', async () => {
-    global.fetch = () => Promise.resolve({
-      json: () => Promise.resolve(mockDrinks),
-    });
+    global.fetch = jest.fn(fetch);
 
     const { history } = renderWithRouterAndRedux(<App />);
     const loginSubmitButton = screen.getByTestId(loginButton);
