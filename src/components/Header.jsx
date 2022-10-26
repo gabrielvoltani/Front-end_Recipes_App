@@ -38,6 +38,7 @@ function Header({ history }) {
           <div>
             <button
               type="button"
+              alt="Search icon"
               src={ searchIcon }
               data-testid="search-top-btn"
               onClick={ () => setToggle(!toggle) }
