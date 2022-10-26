@@ -102,7 +102,7 @@ describe('Testes da page Recipes', () => {
     expect(pathname).toBe('/meals');
 
     const category = await screen.findAllByTestId(/category-filter/i);
-    expect(category.length).toBe(5);
+    expect(category.length).toBe(6);
 
     const beefCategory = await screen.findByTestId('Beef-category-filter');
     expect(beefCategory).toBeInTheDocument();
@@ -154,7 +154,7 @@ describe('Testes da page Recipes', () => {
     userEvent.click(drinkButton);
 
     const category = await screen.findAllByTestId(/-category-filter/i);
-    expect(category.length).toBe(5);
+    expect(category.length).toBe(6);
 
     const twelveMeals = await screen.findAllByTestId(/-card-name/i);
     expect(twelveMeals.length).toBe(11);

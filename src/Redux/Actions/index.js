@@ -17,15 +17,10 @@ export const GET_LIST_CATEGORIES_DRINKS = 'GET_LIST_CATEGORIES_DRINKS';
 export const GET_MEALS_FILTERED_BY_CATEGORY = 'GET_MEALS_FILTER_BY_CATEGORY';
 export const GET_DRINKS_FILTERED_BY_CATEGORY = 'GET_MEALS_FILTER_BY_CATEGORY';
 export const IS_REQUESTING = 'IS_REQUESTING';
-export const REQUEST_FINISHED = 'REQUEST_FINISHED';
 export const IS_FILTERING = 'IS_FILTERING';
 
 export const isRequesting = () => ({
   type: IS_REQUESTING,
-});
-
-export const RequestFinished = () => ({
-  type: REQUEST_FINISHED,
 });
 
 export const addEmail = (payload) => ({

@@ -9,8 +9,6 @@ function SearchBar() {
     'name-search-radio',
     'first-letter-search-radio'];
 
-  console.log(filterRadio);
-
   return (
     <div>
       { arrayFilter.map((title, i) => (
@@ -23,7 +21,6 @@ function SearchBar() {
             data-testid={ idTests[i] }
           />
           { title }
-
         </label>
       ))}
       <button

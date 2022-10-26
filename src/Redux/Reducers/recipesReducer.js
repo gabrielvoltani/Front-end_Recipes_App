@@ -4,7 +4,6 @@ import {
   IS_REQUESTING,
   GET_LIST_CATEGORIES_DRINKS,
   GET_LIST_CATEGORIES_MEALS,
-  REQUEST_FINISHED,
   IS_FILTERING,
 } from '../Actions';
 
@@ -23,11 +22,6 @@ function recipes(state = INITIAL_STATE, { payload, type }) {
     return {
       ...state,
       isRequesting: true,
-    };
-  case REQUEST_FINISHED:
-    return {
-      ...state,
-      isRequesting: false,
     };
   case GET_LIST_CATEGORIES_DRINKS:
     return {
