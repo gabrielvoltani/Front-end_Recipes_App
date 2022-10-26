@@ -4,6 +4,8 @@ import {
   IS_REQUESTING,
   GET_LIST_CATEGORIES_DRINKS,
   GET_LIST_CATEGORIES_MEALS,
+  GET_MEALS_FILTRED,
+  GET_DRINKS_FILTRED,
 } from '../Actions';
 
 const INITIAL_STATE = {
@@ -42,6 +44,16 @@ function recipes(state = INITIAL_STATE, { payload, type }) {
       ...state,
       meals: payload,
       isRequesting: false,
+    };
+  case GET_MEALS_FILTRED:
+    return {
+      ...state,
+      meals: payload,
+    };
+  case GET_DRINKS_FILTRED:
+    return {
+      ...state,
+      drinks: payload,
     };
   default:
     return state;

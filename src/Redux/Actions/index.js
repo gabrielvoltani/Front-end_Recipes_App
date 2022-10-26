@@ -11,6 +11,8 @@ export const GET_MEALS = 'GET_MEALS';
 export const GET_LIST_CATEGORIES_MEALS = 'GET_LIST_CATEGORIES_MEALS';
 export const GET_LIST_CATEGORIES_DRINKS = 'GET_LIST_CATEGORIES_DRINKS';
 export const IS_REQUESTING = 'IS_REQUESTING';
+export const GET_MEALS_FILTRED = 'GET_MEALS_FILTRED';
+export const GET_DRINKS_FILTRED = 'GET_DRINKS_FILTRED';
 
 export const isRequesting = () => ({
   type: IS_REQUESTING,
@@ -38,6 +40,16 @@ export const getListCategoriesMeals = (payload) => ({
 
 export const getListCategoriesDrinks = (payload) => ({
   type: GET_LIST_CATEGORIES_DRINKS,
+  payload,
+});
+
+export const getMealsFiltred = (payload) => ({
+  type: GET_MEALS_FILTRED,
+  payload,
+});
+
+export const getDrinksFiltred = (payload) => ({
+  type: GET_DRINKS_FILTRED,
   payload,
 });
 
