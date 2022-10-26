@@ -125,7 +125,7 @@ function Recipes({
                   { categorie }
                 </button>))}
           </section>
-          { renderListFoods.length > 0 && renderListFoods
+          { renderListFoods && renderListFoods
             .filter((e, index) => index < QUANTITY_OF_RECIPES)
             .map((food, ind) => (
               <div
