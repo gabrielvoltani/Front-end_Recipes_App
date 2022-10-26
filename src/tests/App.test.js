@@ -6,7 +6,9 @@ import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import App from '../App';
 import Footer from '../components/Footer';
 
+
 import mockFetch from './mocks/fetchRecipes';
+
 
 const loginButton = 'login-submit-btn';
 const emailInputId = 'email-input';
@@ -164,6 +166,7 @@ describe('Testes da page Recipes', () => {
     expect(twelveDrinks.length).toBe(12);
   });
 
+
   test('05 - Verifica se os botões de filtro funcionam devidamente na página /meals', async () => {
     const { history } = renderWithRouterAndRedux(<App />, '/meals');
     expect(history.location.pathname).toBe('/meals');
@@ -228,5 +231,38 @@ describe('Testes da page Recipes', () => {
     userEvent.click(buttonFilterAll);
     const cardsFoodsRemovedFilter = await screen.findAllByTestId(/-recipe-card/i);
     expect(cardsFoodsRemovedFilter[0].innerHTML).toContain('GG');
+
+  describe('Testes do component Header', () => {
+    test('01 - Testando o botão de busca', () => {
+      renderWithRouterAndRedux(<App />, '/drinks');
+      const searchTopBtn = screen.getByTestId('search-top-btn');
+
+      userEvent.click(searchTopBtn);
+
+      const searchInput = screen.getByTestId('search-input');
+
+      expect(searchInput).toBeInTheDocument();
+    });
+    test('02 - Teste botão do profile', async () => {
+      const { history } = renderWithRouterAndRedux(<App />, '/meals');
+      const profileTopBtn = screen.getByTestId('profile-top-btn');
+
+      userEvent.click(profileTopBtn);
+
+      const path = history.location.pathname;
+
+      expect(path).toBe('/profile');
+    });
+    test('03', () => {
+      renderWithRouterAndRedux(<App />, '/done-recipes');
+      const doneName = screen.getByText(/done recipes/i);
+      expect(doneName).toBeInTheDocument();
+    });
+    test('04', () => {
+      renderWithRouterAndRedux(<App />, '/favorite-recipes');
+      const favoriteName = screen.getByText(/favorite recipes/i);
+      expect(favoriteName).toBeInTheDocument();
+    });
+
   });
 });
