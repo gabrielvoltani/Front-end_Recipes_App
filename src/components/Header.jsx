@@ -38,11 +38,14 @@ function Header({ history }) {
           <div>
             <button
               type="button"
-              src={ searchIcon }
-              data-testid="search-top-btn"
               onClick={ () => setToggle(!toggle) }
             >
-              <img alt="search" />
+              <img
+                src={ searchIcon }
+                alt="search"
+                type="button"
+                data-testid="search-top-btn"
+              />
             </button>
             {toggle
               ? (
