@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { string, shape, func, bool } from 'prop-types';
@@ -21,18 +21,27 @@ function Recipes({
   meals,
   categoriesDrinks,
   categoriesMeals,
+  drinksWhithoutFilters,
+  mealsWhithoutFilters,
 }) {
-  const [renderDidMount, setRenderDidMount] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [renderListFoods, setRenderListFoods] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
   const [actualType, setActualType] = useState('All');
   const { pathname } = history.location;
 
+  useEffect(() => {
+    const callDispatchActionFoods = async () => {
+      await dispatch(thunkRequestDrinks());
+      await dispatch(thunkRequestMeals());
+    };
+    callDispatchActionFoods();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const dispatchActionsFoods = async () => {
-    await dispatch(thunkRequestDrinks());
-    await dispatch(thunkRequestMeals());
+  }, []);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const applyFilters = () => {
     if (pathname === '/drinks') {
       setRenderListFoods(drinks);
       setCategoriesList([{ strCategory: 'All' }, ...categoriesDrinks]);
@@ -43,63 +52,56 @@ function Recipes({
   };
 
   useEffect(() => {
-    setRenderDidMount(true);
-  }, [pathname]);
+    applyFilters();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname, drinks, meals]);
 
-  useEffect(() => {
-    if (renderDidMount) {
-      const callDispatchActionFoods = async () => {
-        await dispatchActionsFoods();
-      };
-      callDispatchActionFoods();
-      if (renderListFoods.length > 0 && categoriesList.length > 0) {
-        setRenderDidMount(false);
-      }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const resetFilters = () => {
+    if (pathname === '/drinks') {
+      setRenderListFoods(drinksWhithoutFilters);
+      setCategoriesList([{ strCategory: 'All' }, ...categoriesDrinks]);
+    } else {
+      setRenderListFoods(mealsWhithoutFilters);
+      setCategoriesList([{ strCategory: 'All' }, ...categoriesMeals]);
     }
-  }, [
-    renderDidMount,
-    dispatchActionsFoods,
-    categoriesList,
-    renderListFoods,
-    dispatch,
-    categoriesDrinks,
-    categoriesMeals,
-    pathname,
-    drinks,
-    meals]);
+  };
+
+  const filterFoods = useCallback(async () => {
+    if (pathname === '/drinks' && actualType !== 'All') {
+      await dispatch(thunkRequestApiFilterByCategoryDrink(actualType));
+      setRenderListFoods(drinks);
+    } else if (pathname === '/meals' && actualType !== 'All') {
+      await dispatch(thunkRequestApiFilterByCategoryMeal(actualType));
+      setRenderListFoods(meals);
+    } else {
+      resetFilters();
+    }
+    setIsFiltering(false);
+  }, [actualType, dispatch, drinks, meals, pathname, resetFilters]);
 
   useEffect(() => {
     if (isFiltering) {
-      const filterFoods = async () => {
-        if (pathname === '/drinks' && actualType !== 'All') {
-          await dispatch(thunkRequestApiFilterByCategoryDrink(actualType));
-          setRenderListFoods(drinks);
-        } else if (pathname === '/meals' && actualType !== 'All') {
-          await dispatch(thunkRequestApiFilterByCategoryMeal(actualType));
-          setRenderListFoods(meals);
-        } else {
-          await dispatchActionsFoods();
-        }
-        setIsFiltering(false);
+      const callFilterFoods = async () => {
+        filterFoods();
       };
-      filterFoods();
+      setIsLoading(true);
+      callFilterFoods();
+      setIsLoading(false);
     }
   }, [
-    dispatchActionsFoods,
-    renderListFoods,
-    actualType,
     isFiltering,
-    pathname,
-    dispatch,
-    drinks,
-    meals,
+    actualType,
+    filterFoods,
   ]);
 
   const handleClickFilter = async (type) => {
     if (actualType === type) {
+      setRenderListFoods([]);
       setActualType('All');
       setIsFiltering(true);
     } else {
+      setRenderListFoods([]);
       setActualType(type);
       setIsFiltering(true);
     }
@@ -108,35 +110,38 @@ function Recipes({
   return (
     <div>
       <Header history={ history } />
-      <section>
-        { categoriesList.length > 1 && categoriesList
-          .filter((e, index) => index < QUANTITY_OF_CATEGORIES)
-          .map(({ strCategory: categorie }) => (
-            <button
-              key={ categorie }
-              type="button"
-              data-testid={ `${categorie}-category-filter` }
-              onClick={ () => handleClickFilter(categorie) }
-            >
-              { categorie }
-            </button>))}
-      </section>
-      { renderListFoods.length > 0 && renderListFoods
-        .filter((e, index) => index < QUANTITY_OF_RECIPES)
-        .map((food, ind) => (
-          <div
-            key={ pathname === '/drinks'
-              ? `${food.idDrink}-${ind}` : `${food.idMeal}-${ind}` }
-          >
-            <Link
-              to={ pathname === '/drinks'
-                ? `/drinks/${food.idDrink}`
-                : `/meals/${food.idMeal}` }
-            >
-              <CardFood url={ pathname } index={ ind } info={ food } />
-            </Link>
+      {isLoading ? <p>Loading</p> : (
+        <main>
+          <section>
+            { categoriesList.length > 1 && categoriesList
+              .filter((e, index) => index < QUANTITY_OF_CATEGORIES)
+              .map(({ strCategory: categorie }) => (
+                <button
+                  key={ categorie }
+                  type="button"
+                  data-testid={ `${categorie}-category-filter` }
+                  onClick={ () => handleClickFilter(categorie) }
+                >
+                  { categorie }
+                </button>))}
+          </section>
+          { renderListFoods.length > 0 && renderListFoods
+            .filter((e, index) => index < QUANTITY_OF_RECIPES)
+            .map((food, ind) => (
+              <div
+                key={ pathname === '/drinks'
+                  ? `${food.idDrink}-${ind}` : `${food.idMeal}-${ind}` }
+              >
+                <Link
+                  to={ pathname === '/drinks'
+                    ? `/drinks/${food.idDrink}`
+                    : `/meals/${food.idMeal}` }
+                >
+                  <CardFood url={ pathname } index={ ind } info={ food } />
+                </Link>
 
-          </div>))}
+              </div>))}
+        </main>)}
       <Footer />
     </div>
   );
@@ -164,6 +169,8 @@ const mapStateToProps = ({ recipes }) => ({
   categoriesMeals: recipes.categoriesMeals,
   categoriesDrinks: recipes.categoriesDrinks,
   isFiltering: recipes.isFiltering,
+  drinksWhithoutFilters: recipes.drinksWhithoutFilters,
+  mealsWhithoutFilters: recipes.mealsWhithoutFilters,
 });
 
 export default connect(mapStateToProps)(Recipes);

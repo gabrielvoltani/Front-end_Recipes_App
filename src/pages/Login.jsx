@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { func } from 'prop-types';
+import { func, shape } from 'prop-types';
 import { setUser } from '../services/localStorage';
 
 function Login({ history }) {
@@ -50,7 +50,9 @@ function Login({ history }) {
 }
 
 Login.propTypes = {
-  history: func.isRequired,
+  history: shape({
+    push: func,
+  }).isRequired,
 };
 
 export default Login;

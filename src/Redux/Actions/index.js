@@ -18,6 +18,8 @@ export const GET_MEALS_FILTERED_BY_CATEGORY = 'GET_MEALS_FILTER_BY_CATEGORY';
 export const GET_DRINKS_FILTERED_BY_CATEGORY = 'GET_MEALS_FILTER_BY_CATEGORY';
 export const IS_REQUESTING = 'IS_REQUESTING';
 export const IS_FILTERING = 'IS_FILTERING';
+export const ALL_MEALS = 'ALL_MEALS';
+export const ALL_DRINKS = 'ALL_DRINKS';
 
 export const isRequesting = () => ({
   type: IS_REQUESTING,
@@ -33,8 +35,18 @@ export const getDrinks = (payload) => ({
   payload,
 });
 
+export const getAllDrinks = (payload) => ({
+  type: ALL_DRINKS,
+  payload,
+});
+
 export const getMeals = (payload) => ({
   type: GET_MEALS,
+  payload,
+});
+
+export const getAllMeals = (payload) => ({
+  type: ALL_MEALS,
   payload,
 });
 
@@ -67,6 +79,7 @@ export const thunkRequestMeals = () => async (dispatch) => {
   const responseApiMeals = await requestApiMeals();
   const responseApiListCategoriesMeals = await requestApiListCategoriesMeals();
   dispatch(getListCategoriesMeals(responseApiListCategoriesMeals));
+  dispatch(getAllMeals(responseApiMeals));
   return dispatch(getMeals(responseApiMeals));
 };
 
@@ -75,6 +88,7 @@ export const thunkRequestDrinks = () => async (dispatch) => {
   const responseApiDrinks = await requestApiDrinks();
   const responseApiListCategoriesDrinks = await requestApiListCategoriesDrinks();
   dispatch(getListCategoriesDrinks(responseApiListCategoriesDrinks));
+  dispatch(getAllDrinks(responseApiDrinks));
   return dispatch(getDrinks(responseApiDrinks));
 };
 
