@@ -25,13 +25,13 @@ function RecipeDetails(props) {
       fetchMeal();
       console.log('meal');
     } else {
-      console.log('teste');
+      console.log('drink');
       fetchDrink();
     }
   }, []);
 
   return (
-    <div>recipe</div>
+    <div>{recipe.strTags}</div>
   );
 }
 
