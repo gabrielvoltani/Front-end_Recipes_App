@@ -43,7 +43,7 @@ function Header({ history }) {
               data-testid="search-top-btn"
               onClick={ () => setToggle(!toggle) }
             >
-              <img src={ searchIcon } alt="search" />
+              <img alt="search" />
             </button>
             {toggle
               ? (
