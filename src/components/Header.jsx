@@ -4,9 +4,11 @@ import { string } from 'prop-types';
 import { Link } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
+import SearchBar from './SearchBar';
 
 function Header({ history }) {
   const [toggle, setToggle] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
 
   const { pathname } = history.location;
 
@@ -49,11 +51,16 @@ function Header({ history }) {
             </button>
             {toggle
               ? (
-                <input
-                  type="text"
-                  placeholder="Pesquise Aqui"
-                  data-testid="search-input"
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Pesquise Aqui"
+                    data-testid="search-input"
+                    value={ searchValue }
+                    onChange={ ({ target }) => setSearchValue(target.value) }
+                  />
+                  <SearchBar />
+                </div>
               ) : null}
           </div>
         )
