@@ -8,7 +8,6 @@ import SearchBar from './SearchBar';
 
 function Header({ history }) {
   const [toggle, setToggle] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
 
   const { pathname } = history.location;
 
@@ -49,19 +48,9 @@ function Header({ history }) {
                 data-testid="search-top-btn"
               />
             </button>
-            {toggle
-              ? (
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Pesquise Aqui"
-                    data-testid="search-input"
-                    value={ searchValue }
-                    onChange={ ({ target }) => setSearchValue(target.value) }
-                  />
-                  <SearchBar />
-                </div>
-              ) : null}
+
+            { toggle && <SearchBar pathname={ pathname } /> }
+
           </div>
         )
         : (

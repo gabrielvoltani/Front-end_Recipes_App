@@ -1,27 +1,28 @@
 import React from 'react';
 import { number, shape, string } from 'prop-types';
 
-function CardDrink({ index, infoDrink: { strDrinkThumb, strDrink } }) {
+function CardFood({ url, index, info }) {
   return (
     <div
       data-testid={ `${index}-recipe-card` }
     >
       <img
-        src={ strDrinkThumb }
-        alt={ strDrink }
+        src={ url === '/drinks' ? info.strDrinkThumb : info.strMealThumb }
+        alt={ url === '/drinks' ? info.strDrink : info.strMeal }
         width="150px"
         data-testid={ `${index}-card-img` }
       />
       <p
         data-testid={ `${index}-card-name` }
       >
-        { strDrink }
+        { url === '/drinks' ? info.strDrink : info.strMeal }
       </p>
     </div>
   );
 }
 
-CardDrink.propTypes = {
+CardFood.propTypes = {
+  url: string,
   index: number,
   infoDrinks: shape({
     strDrinkThumb: string,
@@ -29,4 +30,4 @@ CardDrink.propTypes = {
   }),
 }.isRequired;
 
-export default CardDrink;
+export default CardFood;
