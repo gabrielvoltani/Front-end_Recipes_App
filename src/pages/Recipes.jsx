@@ -24,7 +24,6 @@ function Recipes({
   drinksWhithoutFilters,
   mealsWhithoutFilters,
 }) {
-  const [isLoading, setIsLoading] = useState(false);
   const [renderListFoods, setRenderListFoods] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);
@@ -85,9 +84,7 @@ function Recipes({
       const callFilterFoods = async () => {
         filterFoods();
       };
-      setIsLoading(true);
       callFilterFoods();
-      setIsLoading(false);
     }
   }, [
     isFiltering,
@@ -110,38 +107,36 @@ function Recipes({
   return (
     <div>
       <Header history={ history } />
-      {isLoading ? <p>Loading</p> : (
-        <main>
-          <section>
-            { categoriesList.length > 1 && categoriesList
-              .filter((e, index) => index < QUANTITY_OF_CATEGORIES)
-              .map(({ strCategory: categorie }) => (
-                <button
-                  key={ categorie }
-                  type="button"
-                  data-testid={ `${categorie}-category-filter` }
-                  onClick={ () => handleClickFilter(categorie) }
-                >
-                  { categorie }
-                </button>))}
-          </section>
-          { renderListFoods && renderListFoods
-            .filter((e, index) => index < QUANTITY_OF_RECIPES)
-            .map((food, ind) => (
-              <div
-                key={ pathname === '/drinks'
-                  ? `${food.idDrink}-${ind}` : `${food.idMeal}-${ind}` }
+      <main>
+        <section>
+          { categoriesList.length > 1 && categoriesList
+            .filter((e, index) => index < QUANTITY_OF_CATEGORIES)
+            .map(({ strCategory: categorie }) => (
+              <button
+                key={ categorie }
+                type="button"
+                data-testid={ `${categorie}-category-filter` }
+                onClick={ () => handleClickFilter(categorie) }
               >
-                <Link
-                  to={ pathname === '/drinks'
-                    ? `/drinks/${food.idDrink}`
-                    : `/meals/${food.idMeal}` }
-                >
-                  <CardFood url={ pathname } index={ ind } info={ food } />
-                </Link>
-
-              </div>))}
-        </main>)}
+                { categorie }
+              </button>))}
+        </section>
+        { renderListFoods && renderListFoods
+          .filter((e, index) => index < QUANTITY_OF_RECIPES)
+          .map((food, ind) => (
+            <div
+              key={ pathname === '/drinks'
+                ? `${food.idDrink}-${ind}` : `${food.idMeal}-${ind}` }
+            >
+              <Link
+                to={ pathname === '/drinks'
+                  ? `/drinks/${food.idDrink}`
+                  : `/meals/${food.idMeal}` }
+              >
+                <CardFood url={ pathname } index={ ind } info={ food } />
+              </Link>
+            </div>))}
+      </main>
       <Footer />
     </div>
   );
