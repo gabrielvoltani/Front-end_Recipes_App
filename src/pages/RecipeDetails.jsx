@@ -102,6 +102,13 @@ function RecipeDetails(props) {
              </div>
            ))}
       </div>
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        className="fixed-bottom"
+      >
+        Start recipe
+      </button>
     </div>
   );
 }
