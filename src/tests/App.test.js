@@ -7,6 +7,7 @@ import App from '../App';
 import Footer from '../components/Footer';
 
 import mockFetch from './mocks/fetchRecipes';
+import Profile from '../pages/Profile';
 
 const loginButton = 'login-submit-btn';
 const emailInputId = 'email-input';
@@ -228,5 +229,87 @@ describe('Testes da page Recipes', () => {
     userEvent.click(buttonFilterAll);
     const cardsFoodsRemovedFilter = await screen.findAllByTestId(/-recipe-card/i);
     expect(cardsFoodsRemovedFilter[0].innerHTML).toContain('GG');
+  });
+});
+
+describe('Testes da pagina Profile', () => {
+  test('01 - Testa se o Profile tem os ids', () => {
+    renderWithRouterAndRedux(<Profile />, '/profile');
+    const doneBtn = screen.getByTestId('profile-done-btn');
+    const favoriteBtn = screen.getByTestId('profile-favorite-btn');
+    const logoutBtn = screen.getByTestId('profile-logout-btn');
+
+    expect(doneBtn).toBeInTheDocument();
+    expect(favoriteBtn).toBeInTheDocument();
+    expect(logoutBtn).toBeInTheDocument();
+  });
+  test('02 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const doneBtn = screen.getByTestId('profile-done-btn');
+    userEvent.click(doneBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/done-recipes');
+  });
+  test('03 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const favoriteBtn = screen.getByTestId('profile-favorite-btn');
+    userEvent.click(favoriteBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/favorite-recipes');
+  });
+  test('04 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const logoutBtn = screen.getByTestId('profile-logout-btn');
+    userEvent.click(logoutBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/');
+  });
+  test('05 - Testa os botões pra mudar de tela', () => {
+    renderWithRouterAndRedux(<Profile />, '/profile');
+
+    const emailProfile = screen.getByTestId('profile-email');
+    expect(emailProfile).toBeInTheDocument();
+  });
+});
+
+describe('Testes do component Header', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(mockFetch);
+  });
+  test('01 - Testando o botão de busca', () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchTopBtn = screen.getByTestId('search-top-btn');
+
+    userEvent.click(searchTopBtn);
+
+    const searchInput = screen.getByTestId('search-input');
+
+    expect(searchInput).toBeInTheDocument();
+  });
+  test('02 - Teste botão do profile', async () => {
+    const { history } = renderWithRouterAndRedux(<App />, '/drinks');
+    const profileTopBtn = screen.getByTestId('profile-top-btn');
+
+    userEvent.click(profileTopBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/profile');
+  });
+  test('03', () => {
+    renderWithRouterAndRedux(<App />, '/done-recipes');
+    const doneName = screen.getByText(/done recipes/i);
+    expect(doneName).toBeInTheDocument();
+  });
+  test('04', () => {
+    renderWithRouterAndRedux(<App />, '/favorite-recipes');
+    const favoriteName = screen.getByText(/favorite recipes/i);
+    expect(favoriteName).toBeInTheDocument();
   });
 });
