@@ -6,6 +6,7 @@ function RecipeDetails(props) {
 
   const [recipe, setRecipe] = useState([]);
   const [recomendations, setRecomendations] = useState([]);
+  const [doneRecipe, setDoneRecipe] = useState(false);
 
   const isMeal = pathname.includes('meals');
   const QUANTITY_OF_RECOMENDATIONS = 6;
@@ -43,6 +44,24 @@ function RecipeDetails(props) {
       fetchDrink();
     }
   }, []);
+
+  useEffect(() => {
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    if (!doneRecipes) return;
+    if (isMeal) {
+      doneRecipes.forEach((receita) => {
+        if (Number(receita.id) === Number(recipe.idMeal)) {
+          setDoneRecipe(true);
+        }
+      });
+    } else {
+      doneRecipes.forEach((receita) => {
+        if (Number(receita.id) === Number(recipe.idDrink)) {
+          setDoneRecipe(true);
+        }
+      });
+    }
+  }, [recipe, isMeal]);
 
   return (
     <div>
@@ -103,6 +122,7 @@ function RecipeDetails(props) {
         type="button"
         data-testid="start-recipe-btn"
         className="fixed-bottom"
+        disabled={ doneRecipe }
       >
         Start recipe
       </button>
