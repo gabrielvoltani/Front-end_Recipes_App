@@ -1,6 +1,9 @@
+import { func } from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 
 function RecipeDetails(props) {
+  const { dispatch, history } = props;
   const id = { props }.props.match.params.id_da_receita;
   const { pathname } = { props }.props.history.location;
 
@@ -47,6 +50,11 @@ function RecipeDetails(props) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleClickStartRecipe = () => {
+    const path = `${pathname}/in-progress`;
+    history.push(path);
+  };
 
   return (
     <div>
@@ -103,8 +111,19 @@ function RecipeDetails(props) {
              </div>
            ))}
       </div>
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        onClick={ handleClickStartRecipe }
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }
 
-export default RecipeDetails;
+RecipeDetails.propTypes = {
+  dispatch: func,
+}.isRequired;
+
+export default connect()(RecipeDetails);
