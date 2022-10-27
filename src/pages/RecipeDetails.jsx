@@ -8,6 +8,7 @@ function RecipeDetails(props) {
   const [recomendations, setRecomendations] = useState([]);
 
   const isMeal = pathname.includes('meals');
+  const QUANTITY_OF_RECOMENDATIONS = 6;
 
   const fetchMeal = async () => {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
@@ -24,6 +25,7 @@ function RecipeDetails(props) {
   const fetchDrinkRecommendations = async () => {
     const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
     const data = await response.json();
+    console.log(data.drinks);
     setRecomendations(data.drinks);
   };
 
@@ -51,6 +53,7 @@ function RecipeDetails(props) {
         data-testid="recipe-photo"
         src={ isMeal ? recipe.strMealThumb : recipe.strDrinkThumb }
         alt={ isMeal ? recipe.strMeal : recipe.strDrink }
+        className="w-100"
       />
       <h1 data-testid="recipe-title">{ isMeal ? recipe.strMeal : recipe.strDrink }</h1>
       <h2 data-testid="recipe-category">
@@ -76,6 +79,29 @@ function RecipeDetails(props) {
         src={ recipe.strYoutube }
         title="video"
       />
+      <h3>Recomendations</h3>
+      <div className="scrollmenu">
+        {recomendations.length > 0
+         && recomendations
+           .filter((_, i) => i < QUANTITY_OF_RECOMENDATIONS)
+           .map((recomendation, index) => (
+             <div
+               key={ index }
+               className="w-51"
+               data-testid={ `${index}-recommendation-card` }
+             >
+               <img
+                 src={ !isMeal
+                   ? recomendation.strMealThumb : recomendation.strDrinkThumb }
+                 alt={ !isMeal ? recomendation.strMeal : recomendation.strDrink }
+                 className="w-50"
+               />
+               <h1 data-testid={ `${index}-recommendation-title` }>
+                 { !isMeal ? recomendation.strMeal : recomendation.strDrink }
+               </h1>
+             </div>
+           ))}
+      </div>
     </div>
   );
 }
