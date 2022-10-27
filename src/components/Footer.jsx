@@ -1,19 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import mealIcon from '../images/mealIcon.svg';
+import drinkIcon from '../images/drinkIcon.svg';
 
 export default function Footer() {
   return (
     <footer data-testid="footer" className="fixed-bottom">
       <Link to="/drinks">
         <img
-          src="/images/drinkIcon.svg"
+          src={ drinkIcon }
           alt="Drink Icon"
           data-testid="drinks-bottom-btn"
         />
       </Link>
       <Link to="/meals">
         <img
-          src="images/mealIcon.svg"
+          src={ mealIcon }
           alt="Meal Icon"
           data-testid="meals-bottom-btn"
         />

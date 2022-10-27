@@ -154,7 +154,6 @@ function SearchBar({ pathname, dispatch }) {
             data-testid={ idTests[i] }
           />
           { title }
-
         </label>
       ))}
       <button
