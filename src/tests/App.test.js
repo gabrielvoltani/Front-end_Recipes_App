@@ -174,4 +174,36 @@ describe('Testes da page Recipes', () => {
     const twelveDrinks = await screen.findAllByTestId(/-card-name/i);
     expect(twelveDrinks.length).toBe(12);
   });
+  describe('Testes do component Header', () => {
+    test('01 - Testando o botão de busca', () => {
+      renderWithRouterAndRedux(<App />, '/drinks');
+      const searchTopBtn = screen.getByTestId('search-top-btn');
+
+      userEvent.click(searchTopBtn);
+
+      const searchInput = screen.getByTestId('search-input');
+
+      expect(searchInput).toBeInTheDocument();
+    });
+    test('02 - Teste botão do profile', async () => {
+      const { history } = renderWithRouterAndRedux(<App />, '/meals');
+      const profileTopBtn = screen.getByTestId('profile-top-btn');
+
+      userEvent.click(profileTopBtn);
+
+      const path = history.location.pathname;
+
+      expect(path).toBe('/profile');
+    });
+    test('03', () => {
+      renderWithRouterAndRedux(<App />, '/done-recipes');
+      const doneName = screen.getByText(/done recipes/i);
+      expect(doneName).toBeInTheDocument();
+    });
+    test('04', () => {
+      renderWithRouterAndRedux(<App />, '/favorite-recipes');
+      const favoriteName = screen.getByText(/favorite recipes/i);
+      expect(favoriteName).toBeInTheDocument();
+    });
+  });
 });
