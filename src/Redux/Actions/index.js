@@ -20,6 +20,8 @@ export const IS_REQUESTING = 'IS_REQUESTING';
 export const IS_FILTERING = 'IS_FILTERING';
 export const ALL_MEALS = 'ALL_MEALS';
 export const ALL_DRINKS = 'ALL_DRINKS';
+export const GET_MEALS_FILTRED = 'GET_MEALS_FILTRED';
+export const GET_DRINKS_FILTRED = 'GET_DRINKS_FILTRED';
 
 export const isRequesting = () => ({
   type: IS_REQUESTING,
@@ -72,6 +74,16 @@ export const getDrinksFilteredByCategory = (payload) => ({
 
 export const filtering = () => ({
   type: IS_FILTERING,
+});
+
+export const getMealsFiltred = (payload) => ({
+  type: GET_MEALS_FILTRED,
+  payload,
+});
+
+export const getDrinksFiltred = (payload) => ({
+  type: GET_DRINKS_FILTRED,
+  payload,
 });
 
 export const thunkRequestMeals = () => async (dispatch) => {

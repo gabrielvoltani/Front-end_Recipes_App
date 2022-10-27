@@ -7,6 +7,8 @@ import {
   IS_FILTERING,
   ALL_MEALS,
   ALL_DRINKS,
+  GET_MEALS_FILTRED,
+  GET_DRINKS_FILTRED,
 } from '../Actions';
 
 const INITIAL_STATE = {
@@ -29,14 +31,12 @@ function recipes(state = INITIAL_STATE, { payload, type }) {
       ...state,
       categoriesDrinks: payload,
       isRequesting: false,
-
     };
   case GET_LIST_CATEGORIES_MEALS:
     return {
       ...state,
       categoriesMeals: payload,
       isRequesting: false,
-
     };
   case GET_DRINKS:
     return {
@@ -52,9 +52,7 @@ function recipes(state = INITIAL_STATE, { payload, type }) {
     };
   case IS_FILTERING:
     return {
-      ...state,
-      isFiltering: !state.isFiltering,
-    };
+      ...state, isFiltering: !state.isFiltering };
   case ALL_MEALS:
     return {
       ...state,
@@ -67,8 +65,13 @@ function recipes(state = INITIAL_STATE, { payload, type }) {
       drinksWhithoutFilters: payload,
       isRequesting: false,
     };
+  case GET_MEALS_FILTRED:
+    return { ...state, meals: payload };
+  case GET_DRINKS_FILTRED:
+    return { ...state, drinks: payload };
   default:
     return state;
   }
 }
+
 export default recipes;
