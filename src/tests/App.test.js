@@ -313,3 +313,43 @@ describe('Testes do component Header', () => {
     expect(favoriteName).toBeInTheDocument();
   });
 });
+
+describe('15 - Testando o componente SearchBar', () => {
+  test('Testando se os inputs são renderizados/Botão', () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId('search-top-btn');
+
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId('search-input');
+    const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
+    const nameRadio = screen.getByTestId('name-search-radio');
+    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+    const searchFilterBtn = screen.getByTestId('exec-search-btn');
+
+    expect(inputSearch).toBeInTheDocument();
+    expect(ingredienteRadio).toBeInTheDocument();
+    expect(nameRadio).toBeInTheDocument();
+    expect(firstLetterRadio).toBeInTheDocument();
+    expect(searchFilterBtn).toBeInTheDocument();
+  });
+  // test('Testa se um Alert aparece quando a API retorna null', () => {
+  //   renderWithRouterAndRedux(<App />, '/meals');
+  //   const searchBtn = screen.getByTestId('search-top-btn');
+
+  //   userEvent.click(searchBtn);
+
+  //   const inputSearch = screen.getByTestId('search-input');
+  //   const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
+  //   const nameRadio = screen.getByTestId('name-search-radio');
+  //   const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+  //   const searchFilterBtn = screen.getByTestId('exec-search-btn');
+
+  //   userEvent.type(inputSearch, 'xablau');
+
+  //   userEvent.selectOptions(ingredienteRadio);
+  //   userEvent.click(searchFilterBtn);
+
+  //   const alertMock = jest.spyOn(window, 'alert');
+  // });
+});
