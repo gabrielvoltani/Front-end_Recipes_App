@@ -109,7 +109,6 @@ describe('Testes da page Recipes', () => {
 
     const { pathname } = history.location;
     expect(pathname).toBe('/meals');
-    expect(fetch).toHaveBeenCalled();
 
     const corba = await screen.findByText(/Corba/i);
     expect(corba).toBeInTheDocument();

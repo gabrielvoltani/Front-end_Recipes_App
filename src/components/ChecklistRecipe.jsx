@@ -3,7 +3,7 @@ import React from 'react';
 function ChecklistRecipe() {
   return (
     <div
-      data-testid="finish-recipe-btn"
+      data-testid="instructions"
     >
       <input type="checkbox" />
     </div>
