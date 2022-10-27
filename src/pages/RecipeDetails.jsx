@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function RecipeDetails(props) {
   const id = { props }.props.match.params.id_da_receita;
   const { pathname } = { props }.props.history.location;
 
-  const [recipe, setRecipe] = React.useState([]);
+  const [recipe, setRecipe] = useState([]);
+  const [recomendations, setRecomendations] = useState([]);
+
+  const isMeal = pathname.includes('meals');
 
   const fetchMeal = async () => {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
@@ -18,17 +21,29 @@ function RecipeDetails(props) {
     setRecipe(data.drinks[0]);
   };
 
+  const fetchDrinkRecommendations = async () => {
+    const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+    const data = await response.json();
+    setRecomendations(data.drinks);
+  };
+
+  const fetchMealRecommendations = async () => {
+    const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+    const data = await response.json();
+    console.log(data.meals);
+    setRecomendations(data.meals);
+  };
+
   useEffect(() => {
     if (pathname.includes('meals')) {
+      console.log(recomendations);
       fetchMeal();
-      console.log('meal');
+      fetchDrinkRecommendations();
     } else {
-      console.log('drink');
+      fetchMealRecommendations();
       fetchDrink();
     }
   }, []);
-
-  const isMeal = pathname.includes('meals');
 
   return (
     <div>
@@ -60,7 +75,6 @@ function RecipeDetails(props) {
         data-testid="video"
         src={ recipe.strYoutube }
         title="video"
-        allowFullScreen
       />
     </div>
   );
