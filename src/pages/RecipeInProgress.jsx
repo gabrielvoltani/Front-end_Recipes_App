@@ -1,22 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { shape, string } from 'prop-types';
+import copy from 'clipboard-copy';
 import ChecklistRecipe from '../components/ChecklistRecipe';
+import { getFavoritesRecipes, saveFavoriteRecipe } from '../services/localStorage';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 
 function RecipeInProgress({ history }) {
+  const [changeFavorite, setChangeFavorite] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isCopied, setCopied] = useState(false);
   const { pathname } = history.location;
   const [recipe, setRecipe] = useState({});
-
+  const [type, setType] = useState('meal');
   const id = pathname.split('/')[2];
+
+  useEffect(() => {
+    const recipesSaveds = getFavoritesRecipes() || [];
+    const key = pathname.includes('drinks') ? 'idDrink' : 'idMeal';
+    const isFavorited = recipesSaveds
+      .some((rec) => rec.id === recipe[key]);
+    setIsFavorite(isFavorited);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [changeFavorite, recipe]);
+
   const fetchMeal = async () => {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { meals } = await response.json();
     setRecipe(meals[0]);
+    setType('meal');
   };
 
   const fetchDrink = async () => {
     const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await response.json();
     setRecipe(drinks[0]);
+    setType('drink');
   };
 
   useEffect(() => {
@@ -25,7 +44,24 @@ function RecipeInProgress({ history }) {
     } else {
       fetchDrink();
     }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleClickShare = () => {
+    const THREE_SECONDS = 3000;
+    const path = pathname.split('/in')[0];
+    copy(`http://localhost:3000${path}`);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, THREE_SECONDS);
+  };
+
+  const handleClickFavorite = () => {
+    setChangeFavorite((prev) => prev + 1);
+    saveFavoriteRecipe(recipe, type);
+  };
 
   const category = pathname.includes('drinks')
     ? recipe.strCategory : recipe.strCategory;
@@ -50,20 +86,28 @@ function RecipeInProgress({ history }) {
         alt={ nameMeal }
         data-testid="recipe-photo"
       />
-      <ChecklistRecipe infoFood={ recipe } />
+      <ChecklistRecipe id={ id } type={ type } infoFood={ recipe } />
       <div>
         <button
           type="button"
-          data-testid="favorite-btn"
+          onClick={ handleClickFavorite }
         >
-          Favoritar
+          <img
+            data-testid="favorite-btn"
+            src={ isFavorite ? blackHeartIcon : whiteHeartIcon }
+            alt="Favorite Button"
+          />
         </button>
-        <button
-          type="button"
-          data-testid="share-btn"
-        >
-          Compartilhar
-        </button>
+        <div>
+          <button
+            type="button"
+            data-testid="share-btn"
+            onClick={ handleClickShare }
+          >
+            Compartilhar
+          </button>
+          { isCopied && <p>Link copied!</p>}
+        </div>
       </div>
       <button
         type="button"

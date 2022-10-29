@@ -29,7 +29,7 @@ function Login({ history }) {
         onChange={ handleInput }
       />
       <input
-        type="text"
+        type="password"
         data-testid="password-input"
         name="password"
         value={ password }
