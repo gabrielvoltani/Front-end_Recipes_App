@@ -111,12 +111,6 @@ function RecipeInProgress({ history }) {
           { isCopied && <p>Link copied!</p>}
         </div>
       </div>
-      <button
-        type="button"
-        data-testid="finish-recipe-btn"
-      >
-        Finalizar Receita
-      </button>
     </div>
   );
 }

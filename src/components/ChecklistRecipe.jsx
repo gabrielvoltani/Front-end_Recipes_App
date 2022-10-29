@@ -16,9 +16,7 @@ function ChecklistRecipe({ id, infoFood, type }) {
       if (measures[index] !== undefined) return `${value} - ${measures[index][1]}`;
       return value;
     });
-  console.log(id);
-  console.log(infoFood);
-  console.log(type);
+
   useEffect(() => {
     if (savedInstruction.instruction) {
       managerInProgressRecipes(instructionsMade, type, id, savedInstruction.instruction);
@@ -59,6 +57,13 @@ function ChecklistRecipe({ id, infoFood, type }) {
           {instruction}
         </label>
       )) }
+      <button
+        type="button"
+        data-testid="finish-recipe-btn"
+        disabled={ (arrayOfInstructions.length !== instructions.length) }
+      >
+        Finalizar Receita
+      </button>
     </div>
   );
 }
