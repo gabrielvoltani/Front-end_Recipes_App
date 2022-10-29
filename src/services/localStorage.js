@@ -12,13 +12,13 @@ export const getFavoritesRecipes = () => JSON
 
 export const saveFavoriteRecipe = (recipe, type) => {
   const recipeFavorite = {
-    id: type === 'drink' ? recipe.idDrink : recipe.idMeal,
-    type,
+    id: type === 'drinks' ? recipe.idDrink : recipe.idMeal,
+    type: type === 'drinks' ? 'drink' : 'meal',
     nationality: recipe.strArea || '',
     category: recipe.strCategory,
-    name: type === 'drink' ? recipe.strDrink : recipe.strMeal,
-    image: type === 'drink' ? recipe.strDrinkThumb : recipe.strMealThumb,
-    alcoholicOrNot: type === 'drink' ? recipe.strAlcoholic : '',
+    name: type === 'drinks' ? recipe.strDrink : recipe.strMeal,
+    image: type === 'drinks' ? recipe.strDrinkThumb : recipe.strMealThumb,
+    alcoholicOrNot: type === 'drinks' ? recipe.strAlcoholic : '',
   };
   console.log(recipeFavorite);
   const recipesSaveds = getFavoritesRecipes() || [];

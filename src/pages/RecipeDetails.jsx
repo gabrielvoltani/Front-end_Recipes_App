@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
 function RecipeDetails(props) {
-  const { dispatch, history } = props;
+  const { history } = props;
   const id = { props }.props.match.params.id_da_receita;
   const { pathname } = { props }.props.history.location;
 

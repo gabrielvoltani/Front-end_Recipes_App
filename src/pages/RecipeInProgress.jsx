@@ -12,7 +12,9 @@ function RecipeInProgress({ history }) {
   const [isCopied, setCopied] = useState(false);
   const { pathname } = history.location;
   const [recipe, setRecipe] = useState({});
-  const [type, setType] = useState('meal');
+  const initialType = pathname.includes('drinks') ? 'drinks' : 'meals';
+  console.log(initialType);
+  const [type, setType] = useState(initialType);
   const id = pathname.split('/')[2];
 
   useEffect(() => {
@@ -28,14 +30,14 @@ function RecipeInProgress({ history }) {
     const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { meals } = await response.json();
     setRecipe(meals[0]);
-    setType('meal');
+    setType('meals');
   };
 
   const fetchDrink = async () => {
     const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
     const { drinks } = await response.json();
     setRecipe(drinks[0]);
-    setType('drink');
+    setType('drinks');
   };
 
   useEffect(() => {
