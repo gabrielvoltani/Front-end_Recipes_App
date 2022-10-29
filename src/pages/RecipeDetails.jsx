@@ -28,14 +28,12 @@ function RecipeDetails(props) {
   const fetchDrinkRecommendations = async () => {
     const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
     const data = await response.json();
-    console.log(data.drinks);
     setRecomendations(data.drinks);
   };
 
   const fetchMealRecommendations = async () => {
     const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
     const data = await response.json();
-    console.log(data.meals);
     setRecomendations(data.meals);
   };
 

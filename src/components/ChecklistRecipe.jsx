@@ -1,8 +1,11 @@
-import { shape, string } from 'prop-types';
+import { func, shape, string } from 'prop-types';
 import React, { useState, useEffect } from 'react';
-import { managerInProgressRecipes, getInProgressRecipes } from '../services/localStorage';
+import {
+  managerInProgressRecipes,
+  getInProgressRecipes,
+  managerDoneRecipes } from '../services/localStorage';
 
-function ChecklistRecipe({ id, infoFood, type }) {
+function ChecklistRecipe({ id, infoFood, type, history }) {
   const [arrayOfInstructions, setArrayOfInstructions] = useState([]);
   const [instructionsMade, setInstructionsMade] = useState([]);
   const [savedInstruction, setSavedInstruction] = useState({});
@@ -37,6 +40,11 @@ function ChecklistRecipe({ id, infoFood, type }) {
     return setInstructionsMade((prev) => [...prev, instruction]);
   };
 
+  const handleFinishRecipe = () => {
+    managerDoneRecipes(infoFood, type, id);
+    history.push('/done-recipes');
+  };
+
   return (
     <div
       data-testid="instructions"
@@ -61,6 +69,7 @@ function ChecklistRecipe({ id, infoFood, type }) {
         type="button"
         data-testid="finish-recipe-btn"
         disabled={ (arrayOfInstructions.length !== instructions.length) }
+        onClick={ handleFinishRecipe }
       >
         Finalizar Receita
       </button>
@@ -81,6 +90,9 @@ ChecklistRecipe.propTypes = {
     strMeasure1: string,
   }),
   type: string,
+  history: {
+    push: func,
+  },
 }.isRequired;
 
 export default ChecklistRecipe;

@@ -13,7 +13,6 @@ function RecipeInProgress({ history }) {
   const { pathname } = history.location;
   const [recipe, setRecipe] = useState({});
   const initialType = pathname.includes('drinks') ? 'drinks' : 'meals';
-  console.log(initialType);
   const [type, setType] = useState(initialType);
   const id = pathname.split('/')[2];
 
@@ -88,7 +87,12 @@ function RecipeInProgress({ history }) {
         alt={ nameMeal }
         data-testid="recipe-photo"
       />
-      <ChecklistRecipe id={ id } type={ type } infoFood={ recipe } />
+      <ChecklistRecipe
+        id={ id }
+        type={ type }
+        history={ history }
+        infoFood={ recipe }
+      />
       <div>
         <button
           type="button"

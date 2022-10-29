@@ -55,3 +55,39 @@ export const managerInProgressRecipes = (ArrayOfInstruction, type, id, instructi
   }
   localStorage.setItem('inProgressRecipes', JSON.stringify(recipesInProgress));
 };
+
+export const getDoneRecipes = () => JSON.parse(localStorage.getItem('doneRecipes'));
+
+export const saveDoneRecipes = (recipe) => localStorage
+  .setItem('doneRecipes', JSON.stringify(recipe));
+
+export const managerDoneRecipes = (recipe, type, id) => {
+  const data = new Date().toISOString();
+  let tags = [];
+  if (recipe.strTags && recipe.strTags.includes(',')) {
+    tags = recipe.strTags.split(',');
+  } else if (recipe.strTags) {
+    tags = [recipe.strTags];
+  }
+  const objectRecipeDone = {
+    id,
+    type: type === 'drinks' ? 'drink' : 'meal',
+    nationality: recipe.strArea || '',
+    category: recipe.strCategory || '',
+    alcoholicOrNot: recipe.strAlcoholic || '',
+    name: type === 'drinks' ? recipe.strDrink : recipe.strMeal,
+    image: type === 'drinks' ? recipe.strDrinkThumb : recipe.strMealThumb,
+    doneDate: data,
+    tags,
+  };
+  const donesRecipes = getDoneRecipes() || [];
+  const idVerification = type === 'drinks' ? 'idDrink' : 'idMeal';
+  const conditionToAdd = donesRecipes
+    .some((rec) => rec.id === recipe[idVerification]);
+  if (conditionToAdd === true) {
+    const recipesFiltered = donesRecipes
+      .filter((rec) => rec.id !== recipe[idVerification]);
+    return saveDoneRecipes([...recipesFiltered, objectRecipeDone]);
+  }
+  return saveDoneRecipes([...donesRecipes, objectRecipeDone]);
+};
