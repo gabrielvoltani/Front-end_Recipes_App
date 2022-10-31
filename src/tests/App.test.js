@@ -315,6 +315,9 @@ describe('Testes do component Header', () => {
 });
 
 describe('15 - Testando o componente SearchBar', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(mockFetch);
+  });
   test('Testando se os inputs são renderizados/Botão', () => {
     renderWithRouterAndRedux(<App />, '/meals');
     const searchBtn = screen.getByTestId('search-top-btn');
