@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 
 function RecipeDetails(props) {
   const id = { props }.props.match.params.id_da_receita;
@@ -34,6 +35,15 @@ function RecipeDetails(props) {
     const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
     const data = await response.json();
     setRecomendations(data.meals);
+  };
+
+  const handleStartRecipe = () => {
+    const { history } = props;
+    if (isMeal) {
+      history.push(`/meals/${id}/in-progress`);
+    } else {
+      history.push(`/drinks/${id}/in-progress`);
+    }
   };
 
   useEffect(() => {
@@ -72,7 +82,6 @@ function RecipeDetails(props) {
     if (isMeal) {
       doneRecipes.forEach((receita) => {
         if (Number(receita.id) === Number(recipe.idMeal)) {
-          console.log('teste');
           setDoneRecipe(true);
         }
       });
@@ -147,11 +156,23 @@ function RecipeDetails(props) {
         data-testid="start-recipe-btn"
         className="fixed-bottom"
         disabled={ doneRecipe }
+        onClick={ handleStartRecipe }
       >
         {inProgress ? 'Continue Recipe' : 'Start recipe'}
       </button>
     </div>
   );
 }
+
+RecipeDetails.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 export default RecipeDetails;
