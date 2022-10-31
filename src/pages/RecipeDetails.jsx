@@ -7,6 +7,7 @@ function RecipeDetails(props) {
   const [recipe, setRecipe] = useState([]);
   const [recomendations, setRecomendations] = useState([]);
   const [doneRecipe, setDoneRecipe] = useState(false);
+  const [inProgress, setInprogress] = useState(false);
 
   const isMeal = pathname.includes('meals');
   const QUANTITY_OF_RECOMENDATIONS = 6;
@@ -40,28 +41,51 @@ function RecipeDetails(props) {
       fetchMeal();
       fetchDrinkRecommendations();
     } else {
-      fetchMealRecommendations();
       fetchDrink();
+      fetchMealRecommendations();
     }
   }, []);
 
+  const isInProgress = () => {
+    let inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (!inProgressRecipes) inProgressRecipes = { meals: {}, drinks: {} };
+
+    if (isMeal) {
+      Object.keys(inProgressRecipes.meals).forEach((receita) => {
+        if (Number(receita) === Number(recipe.idMeal)) {
+          setInprogress(true);
+        }
+      });
+    } else {
+      Object.keys(inProgressRecipes.drinks).forEach((receita) => {
+        if (Number(receita) === Number(recipe.idDrink)) {
+          setInprogress(true);
+        }
+      });
+    }
+  };
+
   useEffect(() => {
-    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-    if (!doneRecipes) return;
+    let doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    if (!doneRecipes) doneRecipes = [];
+
     if (isMeal) {
       doneRecipes.forEach((receita) => {
         if (Number(receita.id) === Number(recipe.idMeal)) {
+          console.log('teste');
           setDoneRecipe(true);
         }
       });
+      isInProgress();
     } else {
       doneRecipes.forEach((receita) => {
         if (Number(receita.id) === Number(recipe.idDrink)) {
           setDoneRecipe(true);
         }
       });
+      isInProgress();
     }
-  }, [recipe, isMeal]);
+  });
 
   return (
     <div>
@@ -124,7 +148,7 @@ function RecipeDetails(props) {
         className="fixed-bottom"
         disabled={ doneRecipe }
       >
-        Start recipe
+        {inProgress ? 'Continue Recipe' : 'Start recipe'}
       </button>
     </div>
   );

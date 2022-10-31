@@ -13,12 +13,16 @@ describe('Testa a página de detalhes de receitas', () => {
   test('01 - Testa se a página de detalhes de receitas contém todos os elementos', async () => {
     const { history } = renderWithRouterAndRedux(<App />);
     history.push('/meals/52771');
-    await screen.findByTestId('recipe-photo');
-    await screen.findByTestId('recipe-title');
-    await screen.findByTestId('recipe-category');
-    await screen.findByTestId('instructions');
-    await screen.findByTestId('video');
-    await screen.findByTestId('0-recommendation-card');
-    await screen.findByTestId('start-recipe-btn');
+    const recipeTitle = await screen.findByTestId('recipe-title');
+    const recipeCategory = await screen.findByTestId('recipe-category');
+    const recipeImage = await screen.findByTestId('recipe-photo');
+    const recipeInstructions = await screen.findByTestId('instructions');
+    const startRecipeButton = await screen.findByTestId('start-recipe-btn');
+
+    expect(recipeTitle).toBeInTheDocument();
+    expect(recipeCategory).toBeInTheDocument();
+    expect(recipeImage).toBeInTheDocument();
+    expect(recipeInstructions).toBeInTheDocument();
+    expect(startRecipeButton).toBeInTheDocument();
   });
 });
