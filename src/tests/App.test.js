@@ -7,6 +7,7 @@ import App from '../App';
 import Footer from '../components/Footer';
 
 import mockFetch from './mocks/fetchRecipes';
+import Profile from '../pages/Profile';
 
 const loginButton = 'login-submit-btn';
 const emailInputId = 'email-input';
@@ -241,6 +242,7 @@ describe('Testes da page Recipes', () => {
   });
 });
 
+
 describe('Teste da tela receitas em progresso', () => {
   Object.defineProperty(navigator, 'clipboard', {
     value: {
@@ -254,7 +256,7 @@ describe('Teste da tela receitas em progresso', () => {
   const urlPathInProgressDrink = '/drinks/178319/in-progress';
   const linkWhiteIcon = 'http://localhost/whiteHeartIcon.svg';
   const favoriteTestIdBtn = 'favorite-btn';
-  test('Testando se as informações da receita aparecem corretamente na página meals', async () => {
+  test('01 - Testando se as informações da receita aparecem corretamente na página meals', async () => {
     const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
     const { pathname } = history.location;
     expect(pathname).toBe(urlPathInProgressMeal);
@@ -290,7 +292,7 @@ describe('Teste da tela receitas em progresso', () => {
     });
   });
 
-  test('Testando components página de drinks', async () => {
+  test('02 - Testando components página de drinks', async () => {
     const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressDrink);
     const { pathname } = history.location;
     expect(pathname).toBe(urlPathInProgressDrink);
@@ -321,7 +323,7 @@ describe('Teste da tela receitas em progresso', () => {
     });
   });
 
-  test('Testando comportamento dos botões', async () => {
+  test('03 - Testando comportamento dos botões', async () => {
     const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
     const { pathname } = history.location;
     expect(pathname).toBe(urlPathInProgressMeal);
@@ -335,7 +337,7 @@ describe('Teste da tela receitas em progresso', () => {
       expect(favoriteBtn).toHaveProperty('src', 'http://localhost/blackHeartIcon.svg');
     });
   });
-  test('Testando o funcionamento do checkbox', async () => {
+  test('04 - Testando o funcionamento do checkbox', async () => {
     // Object.defineProperty(window, 'localStorage', { value: {
     //   getItem: () => ({ inProgressRecipes: JSON.stringify(mockLocalStorage) }),
     // } });
@@ -364,4 +366,128 @@ describe('Teste da tela receitas em progresso', () => {
       expect(history.location.pathname).toBe('/done-recipes');
     });
   });
+
+describe('Testes da pagina Profile', () => {
+  test('01 - Testa se o Profile tem os ids', () => {
+    renderWithRouterAndRedux(<Profile />, '/profile');
+    const doneBtn = screen.getByTestId('profile-done-btn');
+    const favoriteBtn = screen.getByTestId('profile-favorite-btn');
+    const logoutBtn = screen.getByTestId('profile-logout-btn');
+
+    expect(doneBtn).toBeInTheDocument();
+    expect(favoriteBtn).toBeInTheDocument();
+    expect(logoutBtn).toBeInTheDocument();
+  });
+  test('02 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const doneBtn = screen.getByTestId('profile-done-btn');
+    userEvent.click(doneBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/done-recipes');
+  });
+  test('03 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const favoriteBtn = screen.getByTestId('profile-favorite-btn');
+    userEvent.click(favoriteBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/favorite-recipes');
+  });
+  test('04 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const logoutBtn = screen.getByTestId('profile-logout-btn');
+    userEvent.click(logoutBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/');
+  });
+  test('05 - Testa os botões pra mudar de tela', () => {
+    renderWithRouterAndRedux(<Profile />, '/profile');
+
+    const emailProfile = screen.getByTestId('profile-email');
+    expect(emailProfile).toBeInTheDocument();
+  });
+});
+
+describe('Testes do component Header', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(mockFetch);
+  });
+  test('01 - Testando o botão de busca', () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchTopBtn = screen.getByTestId('search-top-btn');
+
+    userEvent.click(searchTopBtn);
+
+    const searchInput = screen.getByTestId('search-input');
+
+    expect(searchInput).toBeInTheDocument();
+  });
+  test('02 - Teste botão do profile', async () => {
+    const { history } = renderWithRouterAndRedux(<App />, '/drinks');
+    const profileTopBtn = screen.getByTestId('profile-top-btn');
+
+    userEvent.click(profileTopBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/profile');
+  });
+  test('03', () => {
+    renderWithRouterAndRedux(<App />, '/done-recipes');
+    const doneName = screen.getByText(/done recipes/i);
+    expect(doneName).toBeInTheDocument();
+  });
+  test('04', () => {
+    renderWithRouterAndRedux(<App />, '/favorite-recipes');
+    const favoriteName = screen.getByText(/favorite recipes/i);
+    expect(favoriteName).toBeInTheDocument();
+  });
+});
+
+describe('15 - Testando o componente SearchBar', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(mockFetch);
+  });
+  test('Testando se os inputs são renderizados/Botão', () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId('search-top-btn');
+
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId('search-input');
+    const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
+    const nameRadio = screen.getByTestId('name-search-radio');
+    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+    const searchFilterBtn = screen.getByTestId('exec-search-btn');
+
+    expect(inputSearch).toBeInTheDocument();
+    expect(ingredienteRadio).toBeInTheDocument();
+    expect(nameRadio).toBeInTheDocument();
+    expect(firstLetterRadio).toBeInTheDocument();
+    expect(searchFilterBtn).toBeInTheDocument();
+  });
+  // test('Testa se um Alert aparece quando a API retorna null', () => {
+  //   renderWithRouterAndRedux(<App />, '/meals');
+  //   const searchBtn = screen.getByTestId('search-top-btn');
+
+  //   userEvent.click(searchBtn);
+
+  //   const inputSearch = screen.getByTestId('search-input');
+  //   const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
+  //   const nameRadio = screen.getByTestId('name-search-radio');
+  //   const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+  //   const searchFilterBtn = screen.getByTestId('exec-search-btn');
+
+  //   userEvent.type(inputSearch, 'xablau');
+
+  //   userEvent.selectOptions(ingredienteRadio);
+  //   userEvent.click(searchFilterBtn);
+
+  //   const alertMock = jest.spyOn(window, 'alert');
+  // });
 });
