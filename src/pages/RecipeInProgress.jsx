@@ -112,7 +112,7 @@ function RecipeInProgress({ history }) {
           >
             Compartilhar
           </button>
-          { isCopied && <p>Link copied!</p>}
+          { isCopied && <p data-testid="text-copied">Link copied!</p>}
         </div>
       </div>
     </div>

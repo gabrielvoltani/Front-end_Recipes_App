@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 
@@ -15,6 +15,17 @@ const email = 'grupo23@gmail.com';
 const password = '1234567';
 const drinkBottomBtn = 'drinks-bottom-btn';
 const mealsBottomBtn = 'meals-bottom-btn';
+
+// const mockLocalStorage = { meals: { 52771: [
+//   'penne rigate - 1 pound',
+//   'olive oil - 1/4 cup',
+//   'garlic - 3 cloves',
+//   'chopped tomatoes - 1 tin ',
+//   'red chile flakes - 1/2 teaspoon',
+//   'italian seasoning - 1/2 teaspoon',
+//   'basil - 6 leaves',
+//   'Parmigiano-Reggiano - spinkling'] },
+// drinks: {} };
 
 describe('Testes da page Login', () => {
   test('01 - Teste se a tela de login contém os atributos descritos no protótipo', () => {
@@ -227,5 +238,130 @@ describe('Testes da page Recipes', () => {
     userEvent.click(buttonFilterAll);
     const cardsFoodsRemovedFilter = await screen.findAllByTestId(/-recipe-card/i);
     expect(cardsFoodsRemovedFilter[0].innerHTML).toContain('GG');
+  });
+});
+
+describe('Teste da tela receitas em progresso', () => {
+  Object.defineProperty(navigator, 'clipboard', {
+    value: {
+      writeText: () => {},
+    },
+  });
+  beforeEach(() => {
+    global.fetch = jest.fn(mockFetch);
+  });
+  const urlPathInProgressMeal = '/meals/52771/in-progress';
+  const urlPathInProgressDrink = '/drinks/178319/in-progress';
+  const linkWhiteIcon = 'http://localhost/whiteHeartIcon.svg';
+  const favoriteTestIdBtn = 'favorite-btn';
+  test('Testando se as informações da receita aparecem corretamente na página meals', async () => {
+    const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
+    const { pathname } = history.location;
+    expect(pathname).toBe(urlPathInProgressMeal);
+
+    await waitFor(() => {
+      const title = screen.getByTestId('recipe-title');
+      expect(title).toBeInTheDocument();
+      expect(title).toHaveTextContent('Spicy Arrabiata Penne');
+
+      const category = screen.getByTestId('recipe-category');
+      expect(category).toBeInTheDocument();
+      expect(category).toHaveTextContent('Vegetarian');
+
+      const imageRecipe = screen.getByTestId('recipe-photo');
+      expect(imageRecipe).toBeInTheDocument();
+      expect(imageRecipe).toHaveProperty('src', 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg');
+      expect(imageRecipe).toHaveProperty('alt', 'Spicy Arrabiata Penne');
+
+      const instructions = screen.getAllByTestId(/-ingredient-step/i);
+      expect(instructions).toHaveLength(8);
+
+      const favoriteBtn = screen.getByTestId(favoriteTestIdBtn);
+      expect(favoriteBtn).toBeInTheDocument();
+      expect(favoriteBtn).toHaveProperty('src', linkWhiteIcon);
+
+      const shareBtn = screen.getByTestId('share-btn');
+      expect(shareBtn).toBeInTheDocument();
+
+      userEvent.click(shareBtn);
+
+      const textIsCopied = screen.getByTestId('text-copied');
+      expect(textIsCopied).toBeInTheDocument();
+    });
+  });
+
+  test('Testando components página de drinks', async () => {
+    const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressDrink);
+    const { pathname } = history.location;
+    expect(pathname).toBe(urlPathInProgressDrink);
+
+    await waitFor(() => {
+      const title = screen.getByTestId('recipe-title');
+      expect(title).toBeInTheDocument();
+      expect(title).toHaveTextContent('Aquamarine');
+
+      const category = screen.getByTestId('recipe-category');
+      expect(category).toBeInTheDocument();
+      expect(category).toHaveTextContent('Cocktail');
+
+      const imageRecipe = screen.getByTestId('recipe-photo');
+      expect(imageRecipe).toBeInTheDocument();
+      expect(imageRecipe).toHaveProperty('src', 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg');
+      expect(imageRecipe).toHaveProperty('alt', 'Aquamarine');
+
+      const instructions = screen.getAllByTestId(/-ingredient-step/i);
+      expect(instructions).toHaveLength(3);
+
+      const favoriteBtn = screen.getByTestId(favoriteTestIdBtn);
+      expect(favoriteBtn).toBeInTheDocument();
+      expect(favoriteBtn).toHaveProperty('src', linkWhiteIcon);
+
+      const shareBtn = screen.getByTestId('share-btn');
+      expect(shareBtn).toBeInTheDocument();
+    });
+  });
+
+  test('Testando comportamento dos botões', async () => {
+    const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
+    const { pathname } = history.location;
+    expect(pathname).toBe(urlPathInProgressMeal);
+
+    await waitFor(() => {
+      const favoriteBtn = screen.getByTestId(favoriteTestIdBtn);
+      expect(favoriteBtn).toBeInTheDocument();
+      expect(favoriteBtn).toHaveProperty('src', linkWhiteIcon);
+
+      userEvent.click(favoriteBtn);
+      expect(favoriteBtn).toHaveProperty('src', 'http://localhost/blackHeartIcon.svg');
+    });
+  });
+  test('Testando o funcionamento do checkbox', async () => {
+    // Object.defineProperty(window, 'localStorage', { value: {
+    //   getItem: () => ({ inProgressRecipes: JSON.stringify(mockLocalStorage) }),
+    // } });
+    const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
+    const { pathname } = history.location;
+    expect(pathname).toBe(urlPathInProgressMeal);
+
+    await waitFor(() => {
+      const instructions = screen.getAllByTestId(/-ingredient-step/i);
+      expect(instructions).toHaveLength(8);
+
+      const finishRecipeBtn = screen.getByTestId('finish-recipe-btn');
+      expect(finishRecipeBtn).toBeDisabled();
+      instructions.forEach((instruction) => {
+        userEvent.click(instruction);
+      });
+      expect(instructions[0]).toHaveClass('checked');
+      expect(finishRecipeBtn).not.toBeDisabled();
+
+      window.location.reload();
+
+      expect(instructions[0]).toHaveClass('checked');
+
+      userEvent.click(finishRecipeBtn);
+
+      expect(history.location.pathname).toBe('/done-recipes');
+    });
   });
 });

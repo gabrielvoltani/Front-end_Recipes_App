@@ -15,10 +15,8 @@ function ChecklistRecipe({ id, infoFood, type, history }) {
   const measures = Object.entries(infoFood)
     .filter(([key, value]) => key.includes('strMeasure') && value !== null);
   const instructions = ingredients
-    .map(([, value], index) => {
-      if (measures[index] !== undefined) return `${value} - ${measures[index][1]}`;
-      return value;
-    });
+    .map(([, value], index) => (
+      measures[index] !== undefined) && `${value} - ${measures[index][1]}`);
 
   useEffect(() => {
     if (savedInstruction.instruction) {
@@ -31,6 +29,7 @@ function ChecklistRecipe({ id, infoFood, type, history }) {
   useEffect(() => {
     if (getInProgressRecipes()) {
       setArrayOfInstructions(getInProgressRecipes()[type][id] || []);
+      console.log(JSON.stringify(getInProgressRecipes()));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

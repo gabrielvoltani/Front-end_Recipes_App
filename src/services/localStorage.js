@@ -20,7 +20,6 @@ export const saveFavoriteRecipe = (recipe, type) => {
     image: type === 'drinks' ? recipe.strDrinkThumb : recipe.strMealThumb,
     alcoholicOrNot: type === 'drinks' ? recipe.strAlcoholic : '',
   };
-  console.log(recipeFavorite);
   const recipesSaveds = getFavoritesRecipes() || [];
   const isFavorited = recipesSaveds
     .some((rec) => rec.id === recipeFavorite.id);
