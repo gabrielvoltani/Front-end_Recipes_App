@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import copy from 'clipboard-copy';
 
 function RecipeDetails(props) {
   const id = { props }.props.match.params.id_da_receita;
@@ -9,6 +10,7 @@ function RecipeDetails(props) {
   const [recomendations, setRecomendations] = useState([]);
   const [doneRecipe, setDoneRecipe] = useState(false);
   const [inProgress, setInprogress] = useState(false);
+  const [shared, setShared] = useState(false);
 
   const isMeal = pathname.includes('meals');
   const QUANTITY_OF_RECOMENDATIONS = 6;
@@ -44,6 +46,12 @@ function RecipeDetails(props) {
     } else {
       history.push(`/drinks/${id}/in-progress`);
     }
+  };
+
+  const handleShare = () => {
+    const { history } = props;
+    copy(`http://localhost:3000${history.location.pathname}`);
+    setShared(true);
   };
 
   useEffect(() => {
@@ -136,7 +144,7 @@ function RecipeDetails(props) {
            .map((recomendation, index) => (
              <div
                key={ index }
-               className="w-51"
+               className="w-50 m-2"
                data-testid={ `${index}-recommendation-card` }
              >
                <img
@@ -151,8 +159,15 @@ function RecipeDetails(props) {
              </div>
            ))}
       </div>
-      <div>
-        <button data-testid="share-btn" type="button">Share</button>
+      {shared && <p>Link copied!</p>}
+      <div className="mb-5">
+        <button
+          data-testid="share-btn"
+          type="button"
+          onClick={ handleShare }
+        >
+          Share
+        </button>
         <button data-testid="favorite-btn" type="button">Favorite</button>
       </div>
       <button
@@ -176,6 +191,9 @@ RecipeDetails.propTypes = {
   }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }),
   }).isRequired,
 };
 
