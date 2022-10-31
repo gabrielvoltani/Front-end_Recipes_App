@@ -151,6 +151,10 @@ function RecipeDetails(props) {
              </div>
            ))}
       </div>
+      <div>
+        <button data-testid="share-btn" type="button">Share</button>
+        <button data-testid="favorite-btn" type="button">Favorite</button>
+      </div>
       <button
         type="button"
         data-testid="start-recipe-btn"
