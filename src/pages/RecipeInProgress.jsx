@@ -5,6 +5,7 @@ import ChecklistRecipe from '../components/ChecklistRecipe';
 import { getFavoritesRecipes, saveFavoriteRecipe } from '../services/localStorage';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import shareIcon from '../images/shareIcon.svg';
 
 function RecipeInProgress({ history }) {
   const [changeFavorite, setChangeFavorite] = useState(0);
@@ -110,7 +111,10 @@ function RecipeInProgress({ history }) {
             data-testid="share-btn"
             onClick={ handleClickShare }
           >
-            Compartilhar
+            <img
+              src={ shareIcon }
+              alt="Icone de Compartilhar"
+            />
           </button>
           { isCopied && <p data-testid="text-copied">Link copied!</p>}
         </div>
