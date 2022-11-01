@@ -71,3 +71,25 @@
   height: 30px;
   width: 30px;
 }
+
+.scrollmenu {
+  background-color: #333;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.scrollmenu div {
+  color: white;
+  display: inline-block;
+  padding: 14px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.scrollmenu a:hover {
+  background-color: #777;
+}
+
+.checked {
+  text-decoration: line-through solid black;
+}
