@@ -18,17 +18,19 @@ function FavoriteRecipes({ history }) {
   }, [changeFavorite]);
 
   const applyFilters = () => {
-    if (pathname === '/drinks') {
-      setRenderListFoods(drinks);
-      setCategoriesList([{ strCategory: 'All' }, ...categoriesDrinks]);
+    if (actualFilter !== 'All') {
+      const recipesSaveds = getFavoritesRecipes() || [];
+      const filteredRecipes = recipesSaveds.filter((rec) => rec.type === actualFilter);
+      setFavoritesRecipes(filteredRecipes);
     } else {
-      setRenderListFoods(meals);
-      setCategoriesList([{ strCategory: 'All' }, ...categoriesMeals]);
+      const recipesSaveds = getFavoritesRecipes() || [];
+      setFavoritesRecipes(recipesSaveds);
     }
   };
 
   useEffect(() => {
     applyFilters();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actualFilter]);
 
   const handleClickFilter = (filter) => {
@@ -49,14 +51,14 @@ function FavoriteRecipes({ history }) {
         <button
           type="button"
           data-testid="filter-by-drink-btn"
-          onClick={ () => handleClickFilter('Drinks') }
+          onClick={ () => handleClickFilter('drink') }
         >
           Drinks
         </button>
         <button
           type="button"
           data-testid="filter-by-meal-btn"
-          onClick={ () => handleClickFilter('Meals') }
+          onClick={ () => handleClickFilter('meal') }
         >
           Meals
         </button>

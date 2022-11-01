@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import copy from 'clipboard-copy';
 
 import { number, string, shape, func } from 'prop-types';
+import { Link } from 'react-router-dom';
 import { getFavoritesRecipes, saveFavoriteRecipe } from '../services/localStorage';
 
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -28,11 +29,13 @@ function CardFavoriteFood({ recipe, index, setChangeFavorite }) {
   const recipeFavorites = getFavoritesRecipes() || [];
   return (
     <div>
-      <p
-        data-testid={ `${index}-horizontal-name` }
-      >
-        { recipe.name }
-      </p>
+      <Link to={ `/${recipe.type}s/${recipe.id}` }>
+        <p
+          data-testid={ `${index}-horizontal-name` }
+        >
+          { recipe.name }
+        </p>
+      </Link>
       {recipe.type === 'meal'
         ? (
           <p
@@ -46,12 +49,14 @@ function CardFavoriteFood({ recipe, index, setChangeFavorite }) {
           >
             {`${recipe.alcoholicOrNot} - ${recipe.category}`}
           </p>)}
-      <img
-        src={ recipe.image }
-        alt={ recipe.name }
-        width="150px"
-        data-testid={ `${index}-horizontal-image` }
-      />
+      <Link to={ `/${recipe.type}s/${recipe.id}` }>
+        <img
+          src={ recipe.image }
+          alt={ recipe.name }
+          width="150px"
+          data-testid={ `${index}-horizontal-image` }
+        />
+      </Link>
       <button
         type="button"
         onClick={ () => handleClickFavorite() }
