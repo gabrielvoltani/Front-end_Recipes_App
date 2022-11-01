@@ -9,6 +9,7 @@ function RecipeDetails(props) {
 
   const [recipe, setRecipe] = useState([]);
   const [recomendations, setRecomendations] = useState([]);
+
   const [doneRecipe, setDoneRecipe] = useState(false);
   const [inProgress, setInprogress] = useState(false);
   const [shared, setShared] = useState(false);

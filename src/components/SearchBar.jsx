@@ -29,88 +29,82 @@ function SearchBar({ pathname, dispatch }) {
     'name-search-radio',
     'first-letter-search-radio',
   ];
-
+  const ALERT = 'Sorry, we haven\'t found any recipes for these filters.';
   const FILTER_LIMIT_RENDER = 12;
 
   const dispatchSeachFIlterMeals = (result) => {
-    if (result[0].meals.length > FILTER_LIMIT_RENDER) {
-      dispatch(getMealsFiltred(result[0].meals[12]));
+    if (result.length > FILTER_LIMIT_RENDER) {
+      dispatch(getMealsFiltred(result[12]));
     }
 
-    dispatch(getMealsFiltred(result[0].meals));
+    dispatch(getMealsFiltred(result));
   };
 
   const dispatchSeachFIlterDrinks = (result) => {
-    if (result[0].drinks.length > FILTER_LIMIT_RENDER) {
-      dispatch(getDrinksFiltred(result[0].drinks[12]));
+    if (result.length > FILTER_LIMIT_RENDER) {
+      dispatch(getDrinksFiltred(result[12]));
     }
 
-    dispatch(getDrinksFiltred(result[0].drinks));
+    dispatch(getDrinksFiltred(result));
   };
 
   const searchApiRadioFiltersMeals = async () => {
     if (filterRadio === arrayFilter[0]) {
-      const result = [];
-      result.push(await requestIngredientApi(searchValue));
-      if (result[0].meals.length === 1) {
+      const result = await requestIngredientApi(searchValue);
+      if (result.length === 1) {
         setRedirectCaseOne(true);
-        setReciveIdFromApis(result[0].meals[0].idMeal);
+        setReciveIdFromApis(result[0].idMeal);
       }
       dispatchSeachFIlterMeals(result);
     }
     if (filterRadio === arrayFilter[1]) {
-      const result = [];
-      result.push(await requestNameApi(searchValue));
-      if (result[0].meals.length === 1) {
+      const result = await requestNameApi(searchValue);
+      if (result.length === 0) global.alert(ALERT);
+      if (result.length === 1) {
         setRedirectCaseOne(true);
-        setReciveIdFromApis(result[0].meals[0].idMeal);
+        setReciveIdFromApis(result[0].idMeal);
       }
-      dispatchSeachFIlterMeals(result);
+      return dispatchSeachFIlterMeals(result);
     }
     if (filterRadio === arrayFilter[2]) {
       if (searchValue.length === 1) {
-        const result = [];
-        result.push(await requestFirstLetter(searchValue));
-        if (result[0].meals.length === 1) {
+        const result = await requestFirstLetter(searchValue);
+        if (result.length === 1) {
           setRedirectCaseOne(true);
-          setReciveIdFromApis(result[0].meals[0].idMeal);
+          setReciveIdFromApis(result[0].idMeal);
         }
-        dispatchSeachFIlterMeals(result);
+        return dispatchSeachFIlterMeals(result);
       }
+      console.log('oi');
       return global.alert('Your search must have only 1 (one) character');
     }
   };
 
   const searchApiRadioFiltersDrinks = async () => {
     if (filterRadio === arrayFilter[0]) {
-      const result = [];
-
-      result.push(await requestDriksIngredientApi(searchValue));
-      if (result[0].drinks.length === 1) {
+      const result = await requestDriksIngredientApi(searchValue);
+      if (result.length === 1) {
         setRedirectCaseOne(true);
-        setReciveIdFromApis(result[0].drinks[0].idDrink);
+        setReciveIdFromApis(result[0].idDrink);
       }
       dispatchSeachFIlterDrinks(result);
     }
 
     if (filterRadio === arrayFilter[1]) {
-      const result = [];
-
-      result.push(await requestDriksNameApi(searchValue));
-      if (result[0].drinks.length === 1) {
+      const result = await requestDriksNameApi(searchValue) || [];
+      if (result.length === 1) {
         setRedirectCaseOne(true);
-        setReciveIdFromApis(result[0].drinks[0].idDrink);
+        setReciveIdFromApis(result[0].idDrink);
       }
       dispatchSeachFIlterDrinks(result);
     }
 
     if (filterRadio === arrayFilter[2]) {
       if (searchValue.length === 1) {
-        const result = [];
-        result.push(await requestDriksFirstLetterApi(searchValue));
-        if (result[0].drinks.length === 1) {
+        const result = await requestDriksFirstLetterApi(searchValue);
+        if (result.length === 1) {
           setRedirectCaseOne(true);
-          setReciveIdFromApis(result[0].drinks[0].idDrink);
+          setReciveIdFromApis(result[0].idDrink);
         }
 
         dispatchSeachFIlterDrinks(result);

@@ -86,3 +86,11 @@
   text-align: center;
   text-decoration: none;
 }
+
+.scrollmenu a:hover {
+  background-color: #777;
+}
+
+.checked {
+  text-decoration: line-through solid black;
+}
