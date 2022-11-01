@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import copy from 'clipboard-copy';
+import { setFavoriteRecipes } from '../services/localStorage';
 
 function RecipeDetails(props) {
   const id = { props }.props.match.params.id_da_receita;
@@ -52,6 +53,10 @@ function RecipeDetails(props) {
     const { history } = props;
     copy(`http://localhost:3000${history.location.pathname}`);
     setShared(true);
+  };
+
+  const handleFavorite = () => {
+    setFavoriteRecipes(isMeal, recipe);
   };
 
   useEffect(() => {
@@ -168,7 +173,13 @@ function RecipeDetails(props) {
         >
           Share
         </button>
-        <button data-testid="favorite-btn" type="button">Favorite</button>
+        <button
+          data-testid="favorite-btn"
+          type="button"
+          onClick={ handleFavorite }
+        >
+          Favorite
+        </button>
       </div>
       <button
         type="button"
