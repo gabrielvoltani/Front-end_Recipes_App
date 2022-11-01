@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import copy from 'clipboard-copy';
-import { saveFavoriteRecipe } from '../services/localStorage';
+import { saveFavoriteRecipe, getFavoritesRecipes } from '../services/localStorage';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function RecipeDetails(props) {
   const id = { props }.props.match.params.id_da_receita;
@@ -9,10 +11,10 @@ function RecipeDetails(props) {
 
   const [recipe, setRecipe] = useState([]);
   const [recomendations, setRecomendations] = useState([]);
-
   const [doneRecipe, setDoneRecipe] = useState(false);
   const [inProgress, setInprogress] = useState(false);
   const [shared, setShared] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
   const isMeal = pathname.includes('meals');
   const QUANTITY_OF_RECOMENDATIONS = 6;
@@ -62,6 +64,7 @@ function RecipeDetails(props) {
     } else {
       saveFavoriteRecipe(recipe, 'drinks');
     }
+    setFavorite(!favorite);
   };
 
   useEffect(() => {
@@ -72,6 +75,10 @@ function RecipeDetails(props) {
       fetchDrink();
       fetchMealRecommendations();
     }
+    const favoriteRecipes = getFavoritesRecipes() || [];
+    const isFavorite = favoriteRecipes.some((favoriteRecipe) => favoriteRecipe.id === id);
+    setFavorite(isFavorite);
+    console.log(isFavorite);
   }, []);
 
   const isInProgress = () => {
@@ -179,11 +186,14 @@ function RecipeDetails(props) {
           Share
         </button>
         <button
-          data-testid="favorite-btn"
           type="button"
           onClick={ handleFavorite }
         >
-          Favorite
+          <img
+            data-testid="favorite-btn"
+            src={ favorite ? blackHeartIcon : whiteHeartIcon }
+            alt="favorite"
+          />
         </button>
       </div>
       <button
