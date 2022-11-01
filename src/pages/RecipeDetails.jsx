@@ -1,14 +1,20 @@
-import { func } from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import copy from 'clipboard-copy';
+import { saveFavoriteRecipe, getFavoritesRecipes } from '../services/localStorage';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 
 function RecipeDetails(props) {
-  const { history } = props;
   const id = { props }.props.match.params.id_da_receita;
   const { pathname } = { props }.props.history.location;
 
   const [recipe, setRecipe] = useState([]);
   const [recomendations, setRecomendations] = useState([]);
+  const [doneRecipe, setDoneRecipe] = useState(false);
+  const [inProgress, setInprogress] = useState(false);
+  const [shared, setShared] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
   const isMeal = pathname.includes('meals');
   const QUANTITY_OF_RECOMENDATIONS = 6;
@@ -37,22 +43,83 @@ function RecipeDetails(props) {
     setRecomendations(data.meals);
   };
 
+  const handleStartRecipe = () => {
+    const { history } = props;
+    if (isMeal) {
+      history.push(`/meals/${id}/in-progress`);
+    } else {
+      history.push(`/drinks/${id}/in-progress`);
+    }
+  };
+
+  const handleShare = () => {
+    const { history } = props;
+    copy(`http://localhost:3000${history.location.pathname}`);
+    setShared(true);
+  };
+
+  const handleFavorite = () => {
+    if (isMeal) {
+      saveFavoriteRecipe(recipe, 'meal');
+    } else {
+      saveFavoriteRecipe(recipe, 'drinks');
+    }
+    setFavorite(!favorite);
+  };
+
   useEffect(() => {
     if (pathname.includes('meals')) {
-      console.log(recomendations);
       fetchMeal();
       fetchDrinkRecommendations();
     } else {
-      fetchMealRecommendations();
       fetchDrink();
+      fetchMealRecommendations();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const favoriteRecipes = getFavoritesRecipes() || [];
+    const isFavorite = favoriteRecipes.some((favoriteRecipe) => favoriteRecipe.id === id);
+    setFavorite(isFavorite);
+    console.log(isFavorite);
   }, []);
 
-  const handleClickStartRecipe = () => {
-    const path = `${pathname}/in-progress`;
-    history.push(path);
+  const isInProgress = () => {
+    let inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (!inProgressRecipes) inProgressRecipes = { meals: {}, drinks: {} };
+
+    if (isMeal) {
+      Object.keys(inProgressRecipes.meals).forEach((receita) => {
+        if (Number(receita) === Number(recipe.idMeal)) {
+          setInprogress(true);
+        }
+      });
+    } else {
+      Object.keys(inProgressRecipes.drinks).forEach((receita) => {
+        if (Number(receita) === Number(recipe.idDrink)) {
+          setInprogress(true);
+        }
+      });
+    }
   };
+
+  useEffect(() => {
+    let doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+    if (!doneRecipes) doneRecipes = [];
+
+    if (isMeal) {
+      doneRecipes.forEach((receita) => {
+        if (Number(receita.id) === Number(recipe.idMeal)) {
+          setDoneRecipe(true);
+        }
+      });
+      isInProgress();
+    } else {
+      doneRecipes.forEach((receita) => {
+        if (Number(receita.id) === Number(recipe.idDrink)) {
+          setDoneRecipe(true);
+        }
+      });
+      isInProgress();
+    }
+  });
 
   return (
     <div>
@@ -94,7 +161,7 @@ function RecipeDetails(props) {
            .map((recomendation, index) => (
              <div
                key={ index }
-               className="w-51"
+               className="w-50 m-2"
                data-testid={ `${index}-recommendation-card` }
              >
                <img
@@ -109,19 +176,51 @@ function RecipeDetails(props) {
              </div>
            ))}
       </div>
+      {shared && <p>Link copied!</p>}
+      <div className="mb-5">
+        <button
+          data-testid="share-btn"
+          type="button"
+          onClick={ handleShare }
+        >
+          Share
+        </button>
+        <button
+          type="button"
+          onClick={ handleFavorite }
+        >
+          <img
+            data-testid="favorite-btn"
+            src={ favorite ? blackHeartIcon : whiteHeartIcon }
+            alt="favorite"
+          />
+        </button>
+      </div>
       <button
         type="button"
         data-testid="start-recipe-btn"
-        onClick={ handleClickStartRecipe }
+        className="fixed-bottom"
+        disabled={ doneRecipe }
+        onClick={ handleStartRecipe }
       >
-        Start Recipe
+        {inProgress ? 'Continue Recipe' : 'Start recipe'}
       </button>
     </div>
   );
 }
 
 RecipeDetails.propTypes = {
-  dispatch: func,
-}.isRequired;
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+    location: PropTypes.shape({
+      pathname: PropTypes.string,
+    }),
+  }).isRequired,
+};
 
-export default connect()(RecipeDetails);
+export default RecipeDetails;

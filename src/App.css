@@ -69,6 +69,7 @@
 
 .searchButton {
   height: 30px;
+  opacity: 0%;
   width: 30px;
 }
 
