@@ -17,13 +17,15 @@ function App() {
       <Route path="/profile" component={ Profile } />
       <Route exact path="/drinks" component={ Recipes } />
       <Route
-        exact path="/drinks/:id_da_receita"
+        exact
+        path="/drinks/:id_da_receita"
         render={ (props) => <RecipeDetails { ...props } /> }
       />
       <Route path="/drinks/:id_da_receita/in-progress" component={ RecipeInProgress } />
       <Route exact path="/meals" component={ Recipes } />
       <Route
-        exact path="/meals/:id_da_receita"
+        exact
+        path="/meals/:id_da_receita"
         render={ (props) => <RecipeDetails { ...props } /> }
       />
       <Route path="/meals/:id_da_receita/in-progress" component={ RecipeInProgress } />
