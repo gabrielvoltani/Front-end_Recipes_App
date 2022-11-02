@@ -91,7 +91,11 @@ describe('Testando página de Receitas Favoritas', () => {
     const mealBtnShare = screen.getByTestId('0-share-btn');
     expect(mealBtnShare).toBeInTheDocument();
     userEvent.click(mealBtnShare);
-    expect(screen.getByTestId('text-copied')).toBeInTheDocument();
+    const isCopied = screen.getByTestId('text-copied');
+    expect(isCopied).toBeInTheDocument();
+    setTimeout(() => {
+      expect(isCopied).not.toBeInTheDocument();
+    }, 3500);
   });
   test('04 - Testa se os filtros aparecem corretamente', () => {
     Object.defineProperty(global, 'localStorage', { value: {
