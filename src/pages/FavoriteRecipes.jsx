@@ -80,13 +80,3 @@ FavoriteRecipes.propTypes = {
 }.isRequired;
 
 export default FavoriteRecipes;
-
-// * Todos os data-testids estão presentes:
-// * O botão de filtro `All` deve ter o atributo `data-testid="filter-by-all-btn"`;
-// * O botão de filtro `Meals` deve ter o atributo `data-testid="filter-by-meal-btn"`;
-// * O botão de `Drinks` deve ter o atributo `data-testid="filter-by-drink-btn"`;
-// * A imagem do card de receita deve ter o atributo `data-testid="${index}-horizontal-image"`;
-// * O texto da categoria da receita deve ter o atributo `data-testid="${index}-horizontal-top-text"`;
-// * O texto do nome da receita deve ter o atributo `data-testid="${index}-horizontal-name"`;
-// * O elemento de compartilhar a receita deve ter o atributo `data-testid="${index}-horizontal-share-btn"`;
-// * O elemento de favoritar a receita deve ter o atributo `data-testid="${index}-horizontal-favorite-btn"`;
