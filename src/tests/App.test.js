@@ -338,9 +338,6 @@ describe('Teste da tela receitas em progresso', () => {
     });
   });
   test('04 - Testando o funcionamento do checkbox', async () => {
-    // Object.defineProperty(window, 'localStorage', { value: {
-    //   getItem: () => ({ inProgressRecipes: JSON.stringify(mockLocalStorage) }),
-    // } });
     const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
     const { pathname } = history.location;
     expect(pathname).toBe(urlPathInProgressMeal);

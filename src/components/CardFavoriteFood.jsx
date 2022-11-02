@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { getFavoritesRecipes, saveFavoriteRecipe } from '../services/localStorage';
 
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 
 function CardFavoriteFood({ recipe, index, setChangeFavorite }) {
@@ -59,17 +58,19 @@ function CardFavoriteFood({ recipe, index, setChangeFavorite }) {
       </Link>
       <button
         type="button"
+        data-testid={ `${index}-favorite-btn` }
         onClick={ () => handleClickFavorite() }
       >
         <img
           data-testid={ `${index}-horizontal-favorite-btn` }
           src={ recipeFavorites.some((rec) => rec.id === recipe.id)
-            ? blackHeartIcon : whiteHeartIcon }
+            && blackHeartIcon }
           alt="Favorite Button"
         />
       </button>
       <button
         type="button"
+        data-testid={ `${index}-share-btn` }
         onClick={ () => handleClickShare() }
       >
         <img

@@ -18,8 +18,8 @@ function FavoriteRecipes({ history }) {
   }, [changeFavorite]);
 
   const applyFilters = () => {
-    if (actualFilter !== 'All') {
-      const recipesSaveds = getFavoritesRecipes() || [];
+    if (actualFilter !== 'All' && getFavoritesRecipes()) {
+      const recipesSaveds = getFavoritesRecipes();
       const filteredRecipes = recipesSaveds.filter((rec) => rec.type === actualFilter);
       setFavoritesRecipes(filteredRecipes);
     } else {
