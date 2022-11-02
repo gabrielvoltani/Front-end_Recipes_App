@@ -27,8 +27,9 @@ function ChecklistRecipe({ id, infoFood, type, history }) {
   }, [savedInstruction]);
 
   useEffect(() => {
-    const getObject = getInProgressRecipes() || { drinks: {}, meals: {} };
-    setArrayOfInstructions(getObject[id] || []);
+    if (getInProgressRecipes()) {
+      setArrayOfInstructions(getInProgressRecipes()[type][id] || []);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
