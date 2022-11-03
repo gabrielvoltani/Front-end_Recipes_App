@@ -11,15 +11,18 @@ export const getFavoritesRecipes = () => JSON
   .parse(localStorage.getItem('favoriteRecipes'));
 
 export const saveFavoriteRecipe = (recipe, type) => {
-  const recipeFavorite = {
-    id: type === 'drinks' ? recipe.idDrink : recipe.idMeal,
-    type: type === 'drinks' ? 'drink' : 'meal',
-    nationality: recipe.strArea || '',
-    category: recipe.strCategory,
-    name: type === 'drinks' ? recipe.strDrink : recipe.strMeal,
-    image: type === 'drinks' ? recipe.strDrinkThumb : recipe.strMealThumb,
-    alcoholicOrNot: type === 'drinks' ? recipe.strAlcoholic : '',
-  };
+  let recipeFavorite = recipe;
+  if (recipe.strCategory && type) {
+    recipeFavorite = {
+      id: type === 'drinks' ? recipe.idDrink : recipe.idMeal,
+      type: type === 'drinks' ? 'drink' : 'meal',
+      nationality: recipe.strArea || '',
+      category: recipe.strCategory,
+      name: type === 'drinks' ? recipe.strDrink : recipe.strMeal,
+      image: type === 'drinks' ? recipe.strDrinkThumb : recipe.strMealThumb,
+      alcoholicOrNot: type === 'drinks' ? recipe.strAlcoholic : '',
+    };
+  }
   const recipesSaveds = getFavoritesRecipes() || [];
   const isFavorited = recipesSaveds
     .some((rec) => rec.id === recipeFavorite.id);
@@ -68,6 +71,7 @@ export const managerDoneRecipes = (recipe, type, id) => {
   } else if (recipe.strTags) {
     tags = [recipe.strTags];
   }
+
   const objectRecipeDone = {
     id,
     type: type === 'drinks' ? 'drink' : 'meal',
@@ -79,6 +83,7 @@ export const managerDoneRecipes = (recipe, type, id) => {
     doneDate: data,
     tags,
   };
+
   const donesRecipes = getDoneRecipes() || [];
   const idVerification = type === 'drinks' ? 'idDrink' : 'idMeal';
   const conditionToAdd = donesRecipes

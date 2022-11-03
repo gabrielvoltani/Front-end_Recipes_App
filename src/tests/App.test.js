@@ -16,17 +16,7 @@ const email = 'grupo23@gmail.com';
 const password = '1234567';
 const drinkBottomBtn = 'drinks-bottom-btn';
 const mealsBottomBtn = 'meals-bottom-btn';
-
-// const mockLocalStorage = { meals: { 52771: [
-//   'penne rigate - 1 pound',
-//   'olive oil - 1/4 cup',
-//   'garlic - 3 cloves',
-//   'chopped tomatoes - 1 tin ',
-//   'red chile flakes - 1/2 teaspoon',
-//   'italian seasoning - 1/2 teaspoon',
-//   'basil - 6 leaves',
-//   'Parmigiano-Reggiano - spinkling'] },
-// drinks: {} };
+const doneRecipes = '/done-recipes';
 
 describe('Testes da page Login', () => {
   test('01 - Teste se a tela de login contém os atributos descritos no protótipo', () => {
@@ -242,6 +232,116 @@ describe('Testes da page Recipes', () => {
   });
 });
 
+describe('Testes da pagina Profile', () => {
+  test('01 - Testa se o Profile tem os ids', () => {
+    renderWithRouterAndRedux(<Profile />, '/profile');
+    const doneBtn = screen.getByTestId('profile-done-btn');
+    const favoriteBtn = screen.getByTestId('profile-favorite-btn');
+    const logoutBtn = screen.getByTestId('profile-logout-btn');
+
+    expect(doneBtn).toBeInTheDocument();
+    expect(favoriteBtn).toBeInTheDocument();
+    expect(logoutBtn).toBeInTheDocument();
+  });
+
+  test('02 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const doneBtn = screen.getByTestId('profile-done-btn');
+    userEvent.click(doneBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe(doneRecipes);
+  });
+
+  test('03 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const favoriteBtn = screen.getByTestId('profile-favorite-btn');
+    userEvent.click(favoriteBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/favorite-recipes');
+  });
+
+  test('04 - Testa os botões pra mudar de tela(Done Recipes)', () => {
+    const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
+    const logoutBtn = screen.getByTestId('profile-logout-btn');
+    userEvent.click(logoutBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/');
+  });
+
+  test('05 - Testa os botões pra mudar de tela', () => {
+    renderWithRouterAndRedux(<Profile />, '/profile');
+
+    const emailProfile = screen.getByTestId('profile-email');
+    expect(emailProfile).toBeInTheDocument();
+  });
+});
+
+describe('Testes do component Header', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(mockFetch);
+  });
+  test('01 - Testando o botão de busca', () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchTopBtn = screen.getByTestId('search-top-btn');
+
+    userEvent.click(searchTopBtn);
+
+    const searchInput = screen.getByTestId('search-input');
+
+    expect(searchInput).toBeInTheDocument();
+  });
+  test('02 - Teste botão do profile', async () => {
+    const { history } = renderWithRouterAndRedux(<App />, '/drinks');
+    const profileTopBtn = screen.getByTestId('profile-top-btn');
+
+    userEvent.click(profileTopBtn);
+
+    const path = history.location.pathname;
+
+    expect(path).toBe('/profile');
+  });
+  test('03', () => {
+    renderWithRouterAndRedux(<App />, '/done-recipes');
+    const doneName = screen.getByText(/done recipes/i);
+    expect(doneName).toBeInTheDocument();
+  });
+  test('04', () => {
+    renderWithRouterAndRedux(<App />, '/favorite-recipes');
+    const favoriteName = screen.getByText(/favorite recipes/i);
+    expect(favoriteName).toBeInTheDocument();
+  });
+});
+
+describe('15 - Testando o componente SearchBar', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(mockFetch);
+  });
+  test('Testando se os inputs são renderizados/Botão', () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId('search-top-btn');
+
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId('search-input');
+    const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
+    const nameRadio = screen.getByTestId('name-search-radio');
+    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+    const searchFilterBtn = screen.getByTestId('exec-search-btn');
+
+    expect(inputSearch).toBeInTheDocument();
+    expect(ingredienteRadio).toBeInTheDocument();
+    expect(nameRadio).toBeInTheDocument();
+    expect(firstLetterRadio).toBeInTheDocument();
+    expect(searchFilterBtn).toBeInTheDocument();
+  });
+});
+
 describe('Teste da tela receitas em progresso', () => {
   Object.defineProperty(navigator, 'clipboard', {
     value: {
@@ -255,7 +355,6 @@ describe('Teste da tela receitas em progresso', () => {
   const urlPathInProgressDrink = '/drinks/178319/in-progress';
   const linkWhiteIcon = 'http://localhost/whiteHeartIcon.svg';
   const favoriteTestIdBtn = 'favorite-btn';
-  const doneRecipes = '/done-recipes';
   test('01 - Testando se as informações da receita aparecem corretamente na página meals', async () => {
     const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
     const { pathname } = history.location;
@@ -337,10 +436,8 @@ describe('Teste da tela receitas em progresso', () => {
       expect(favoriteBtn).toHaveProperty('src', 'http://localhost/blackHeartIcon.svg');
     });
   });
+
   test('04 - Testando o funcionamento do checkbox', async () => {
-    // Object.defineProperty(window, 'localStorage', { value: {
-    //   getItem: () => ({ inProgressRecipes: JSON.stringify(mockLocalStorage) }),
-    // } });
     const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
     const { pathname } = history.location;
     expect(pathname).toBe(urlPathInProgressMeal);
@@ -367,109 +464,18 @@ describe('Teste da tela receitas em progresso', () => {
     });
   });
 
-  describe('Testes da pagina Profile', () => {
-    test('01 - Testa se o Profile tem os ids', () => {
-      renderWithRouterAndRedux(<Profile />, '/profile');
-      const doneBtn = screen.getByTestId('profile-done-btn');
-      const favoriteBtn = screen.getByTestId('profile-favorite-btn');
-      const logoutBtn = screen.getByTestId('profile-logout-btn');
-
-      expect(doneBtn).toBeInTheDocument();
-      expect(favoriteBtn).toBeInTheDocument();
-      expect(logoutBtn).toBeInTheDocument();
-    });
-    test('02 - Testa os botões pra mudar de tela(Done Recipes)', () => {
-      const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
-      const doneBtn = screen.getByTestId('profile-done-btn');
-      userEvent.click(doneBtn);
-
-      const path = history.location.pathname;
-
-      expect(path).toBe(doneRecipes);
-    });
-    test('03 - Testa os botões pra mudar de tela(Done Recipes)', () => {
-      const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
-      const favoriteBtn = screen.getByTestId('profile-favorite-btn');
-      userEvent.click(favoriteBtn);
-
-      const path = history.location.pathname;
-
-      expect(path).toBe('/favorite-recipes');
-    });
-    test('04 - Testa os botões pra mudar de tela(Done Recipes)', () => {
-      const { history } = renderWithRouterAndRedux(<Profile />, '/profile');
-      const logoutBtn = screen.getByTestId('profile-logout-btn');
-      userEvent.click(logoutBtn);
-
-      const path = history.location.pathname;
-
-      expect(path).toBe('/');
-    });
-    test('05 - Testa os botões pra mudar de tela', () => {
-      renderWithRouterAndRedux(<Profile />, '/profile');
-
-      const emailProfile = screen.getByTestId('profile-email');
-      expect(emailProfile).toBeInTheDocument();
-    });
-  });
-
-  describe('Testes do component Header', () => {
-    beforeEach(() => {
-      global.fetch = jest.fn(mockFetch);
-    });
-    test('01 - Testando o botão de busca', () => {
-      renderWithRouterAndRedux(<App />, '/drinks');
-      const searchTopBtn = screen.getByTestId('search-top-btn');
-
-      userEvent.click(searchTopBtn);
-
-      const searchInput = screen.getByTestId('search-input');
-
-      expect(searchInput).toBeInTheDocument();
-    });
-    test('02 - Teste botão do profile', async () => {
-      const { history } = renderWithRouterAndRedux(<App />, '/drinks');
-      const profileTopBtn = screen.getByTestId('profile-top-btn');
-
-      userEvent.click(profileTopBtn);
-
-      const path = history.location.pathname;
-
-      expect(path).toBe('/profile');
-    });
-    test('03', () => {
-      renderWithRouterAndRedux(<App />, '/done-recipes');
-      const doneName = screen.getByText(/done recipes/i);
-      expect(doneName).toBeInTheDocument();
-    });
-    test('04', () => {
-      renderWithRouterAndRedux(<App />, '/favorite-recipes');
-      const favoriteName = screen.getByText(/favorite recipes/i);
-      expect(favoriteName).toBeInTheDocument();
-    });
-  });
-
-  describe('15 - Testando o componente SearchBar', () => {
-    beforeEach(() => {
-      global.fetch = jest.fn(mockFetch);
-    });
-    test('Testando se os inputs são renderizados/Botão', () => {
-      renderWithRouterAndRedux(<App />, '/meals');
-      const searchBtn = screen.getByTestId('search-top-btn');
-
-      userEvent.click(searchBtn);
-
-      const inputSearch = screen.getByTestId('search-input');
-      const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
-      const nameRadio = screen.getByTestId('name-search-radio');
-      const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
-      const searchFilterBtn = screen.getByTestId('exec-search-btn');
-
-      expect(inputSearch).toBeInTheDocument();
-      expect(ingredienteRadio).toBeInTheDocument();
-      expect(nameRadio).toBeInTheDocument();
-      expect(firstLetterRadio).toBeInTheDocument();
-      expect(searchFilterBtn).toBeInTheDocument();
+  test('05 - Testando se a página funciona sem que haja algum id cadastrado no localStorage', async () => {
+    Object.defineProperty(global, 'localStorage', { value: {
+      getItem: () => null,
+      setItem: () => { },
+    } });
+    renderWithRouterAndRedux(<App />, urlPathInProgressMeal);
+    await waitFor(() => {
+      const instructions = screen.getAllByTestId(/-ingredient-step/i);
+      expect(instructions).toHaveLength(8);
+      instructions.forEach((instruction) => {
+        expect(instruction).not.toHaveClass('checked');
+      });
     });
   });
 });
