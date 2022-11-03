@@ -9,33 +9,8 @@ function DoneRecipes({ history }) {
   const [recipes, setRecipes] = useState([]);
   const [shared, setShared] = useState(false);
 
-  const receitaMeals = {
-    id: '52771',
-    type: 'meal',
-    nationality: 'Italian',
-    category: 'Vegetarian',
-    alcoholicOrNot: '',
-    name: 'Spicy Arrabiata Penne',
-    image: 'https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg',
-    doneDate: '23/06/2020',
-    tags: ['Pasta', 'Curry'],
-  };
-
-  const receitaDrinks = {
-    id: '178319',
-    type: 'drink',
-    nationality: '',
-    category: 'Cocktail',
-    alcoholicOrNot: 'Alcoholic',
-    name: 'Aquamarine',
-    image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
-    doneDate: '23/06/2020',
-    tags: [],
-  };
-
   useEffect(() => {
-    localStorage.setItem('doneRecipes', JSON.stringify([receitaMeals, receitaDrinks]));
-    const data = JSON.parse(localStorage.getItem('doneRecipes'));
+    const data = JSON.parse(localStorage.getItem('doneRecipes')) || [];
     setRecipes(data);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -136,6 +111,7 @@ function DoneRecipes({ history }) {
             ))}
 
             <p data-testid={ `${index}-horizontal-done-date` }>{info.doneDate }</p>
+
             {shared && <p>Link copied!</p>}
             <button
               type="button"
