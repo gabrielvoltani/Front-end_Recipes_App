@@ -78,13 +78,12 @@ function RecipeDetails(props) {
     const favoriteRecipes = getFavoritesRecipes() || [];
     const isFavorite = favoriteRecipes.some((favoriteRecipe) => favoriteRecipe.id === id);
     setFavorite(isFavorite);
-    console.log(isFavorite);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isInProgress = () => {
-    let inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    if (!inProgressRecipes) inProgressRecipes = { meals: {}, drinks: {} };
-
+    const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'))
+    || { meals: {}, drinks: {} };
     if (isMeal) {
       Object.keys(inProgressRecipes.meals).forEach((receita) => {
         if (Number(receita) === Number(recipe.idMeal)) {
@@ -95,14 +94,14 @@ function RecipeDetails(props) {
       Object.keys(inProgressRecipes.drinks).forEach((receita) => {
         if (Number(receita) === Number(recipe.idDrink)) {
           setInprogress(true);
+          console.log('entrou');
         }
       });
     }
   };
 
   useEffect(() => {
-    let doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-    if (!doneRecipes) doneRecipes = [];
+    const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes') || '[]');
 
     if (isMeal) {
       doneRecipes.forEach((receita) => {
@@ -187,6 +186,7 @@ function RecipeDetails(props) {
         </button>
         <button
           type="button"
+          data-testid="btn-fav"
           onClick={ handleFavorite }
         >
           <img
