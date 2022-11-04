@@ -6,7 +6,7 @@ import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import App from '../App';
 import Footer from '../components/Footer';
 
-import mockFetch from './mocks/fetchRecipes';
+import { mockFetch, mockFetchtwo } from './mocks/fetchRecipes';
 import Profile from '../pages/Profile';
 
 const loginButton = 'login-submit-btn';
@@ -16,6 +16,13 @@ const email = 'grupo23@gmail.com';
 const password = '1234567';
 const drinkBottomBtn = 'drinks-bottom-btn';
 const mealsBottomBtn = 'meals-bottom-btn';
+
+const searchTopBtnId = 'search-top-btn';
+const searchInputId = 'search-input';
+const ingredientSearchRadioId = 'ingredient-search-radio';
+const nameSearchRadioId = 'name-search-radio';
+const firstLetterSearchRadioId = 'first-letter-search-radio';
+const searchButtonId = 'exec-search-btn';
 
 describe('Testes da page Login', () => {
   test('01 - Teste se a tela de login contém os atributos descritos no protótipo', () => {
@@ -284,11 +291,11 @@ describe('Testes do component Header', () => {
   });
   test('01 - Testando o botão de busca', () => {
     renderWithRouterAndRedux(<App />, '/drinks');
-    const searchTopBtn = screen.getByTestId('search-top-btn');
+    const searchTopBtn = screen.getByTestId(searchTopBtnId);
 
     userEvent.click(searchTopBtn);
 
-    const searchInput = screen.getByTestId('search-input');
+    const searchInput = screen.getByTestId(searchInputId);
 
     expect(searchInput).toBeInTheDocument();
   });
@@ -314,18 +321,22 @@ describe('Testes do component Header', () => {
   });
 });
 
-describe('15 - Testando o componente SearchBar', () => {
-  test('Testando se os inputs são renderizados/Botão', () => {
+describe('Testes do componente SearchBar', () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(mockFetchtwo);
+  });
+  test('Testando se os inputs/botões são renderizados', () => {
     renderWithRouterAndRedux(<App />, '/meals');
-    const searchBtn = screen.getByTestId('search-top-btn');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    expect(searchBtn).toBeInTheDocument();
 
     userEvent.click(searchBtn);
 
-    const inputSearch = screen.getByTestId('search-input');
-    const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
-    const nameRadio = screen.getByTestId('name-search-radio');
-    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
-    const searchFilterBtn = screen.getByTestId('exec-search-btn');
+    const inputSearch = screen.getByTestId(searchInputId);
+    const ingredienteRadio = screen.getByTestId(ingredientSearchRadioId);
+    const nameRadio = screen.getByTestId(nameSearchRadioId);
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
 
     expect(inputSearch).toBeInTheDocument();
     expect(ingredienteRadio).toBeInTheDocument();
@@ -333,23 +344,268 @@ describe('15 - Testando o componente SearchBar', () => {
     expect(firstLetterRadio).toBeInTheDocument();
     expect(searchFilterBtn).toBeInTheDocument();
   });
-  // test('Testa se um Alert aparece quando a API retorna null', () => {
-  //   renderWithRouterAndRedux(<App />, '/meals');
-  //   const searchBtn = screen.getByTestId('search-top-btn');
 
-  //   userEvent.click(searchBtn);
+  test('Testando radio buttons e o name search', async () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
 
-  //   const inputSearch = screen.getByTestId('search-input');
-  //   const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
-  //   const nameRadio = screen.getByTestId('name-search-radio');
-  //   const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
-  //   const searchFilterBtn = screen.getByTestId('exec-search-btn');
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'Corba');
+    expect(inputSearch).toHaveValue('Corba');
 
-  //   userEvent.type(inputSearch, 'xablau');
+    const ingredienteRadio = screen.getByTestId(ingredientSearchRadioId);
+    const nameRadio = screen.getByTestId(nameSearchRadioId);
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
 
-  //   userEvent.selectOptions(ingredienteRadio);
-  //   userEvent.click(searchFilterBtn);
+    userEvent.click(nameRadio);
+    expect(nameRadio).toBeChecked();
+    expect(ingredienteRadio).not.toBeChecked();
+    expect(firstLetterRadio).not.toBeChecked();
 
-  //   const alertMock = jest.spyOn(window, 'alert');
-  // });
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+
+    const food = await screen.findByAltText('Corba');
+    expect(food).toBeInTheDocument();
+  });
+
+  test('Testando checks e um search por name', async () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'GG');
+    expect(inputSearch).toHaveValue('GG');
+
+    const ingredienteRadio = screen.getByTestId(ingredientSearchRadioId);
+    const nameRadio = screen.getByTestId(nameSearchRadioId);
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
+
+    userEvent.click(nameRadio);
+    expect(nameRadio).toBeChecked();
+    expect(ingredienteRadio).not.toBeChecked();
+    expect(firstLetterRadio).not.toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+
+    const food = await screen.findByAltText('GG');
+    expect(food).toBeInTheDocument();
+  });
+
+  test('Testando search por nome único (MEALS)', () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'steak');
+    expect(inputSearch).toHaveValue('steak');
+
+    const nameRadio = screen.getByTestId(nameSearchRadioId);
+
+    userEvent.click(nameRadio);
+    expect(nameRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por nome único (DRINKS)', () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'martini');
+    expect(inputSearch).toHaveValue('martini');
+
+    const nameRadio = screen.getByTestId(nameSearchRadioId);
+
+    userEvent.click(nameRadio);
+    expect(nameRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por ingredient (MEALS)', () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'onion');
+    expect(inputSearch).toHaveValue('onion');
+
+    const ingredienteRadio = screen.getByTestId(ingredientSearchRadioId);
+
+    userEvent.click(ingredienteRadio);
+    expect(ingredienteRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por ingredient único (MEALS)', () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'rice');
+    expect(inputSearch).toHaveValue('rice');
+
+    const ingredienteRadio = screen.getByTestId(ingredientSearchRadioId);
+
+    userEvent.click(ingredienteRadio);
+    expect(ingredienteRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por ingredient (DRINKS)', () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'ice');
+    expect(inputSearch).toHaveValue('ice');
+
+    const ingredienteRadio = screen.getByTestId(ingredientSearchRadioId);
+
+    userEvent.click(ingredienteRadio);
+    expect(ingredienteRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por ingredient único (DRINKS)', () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'vodka');
+    expect(inputSearch).toHaveValue('vodka');
+
+    const ingredienteRadio = screen.getByTestId(ingredientSearchRadioId);
+
+    userEvent.click(ingredienteRadio);
+    expect(ingredienteRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por firstLetter (DRINKS)', () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'y');
+    expect(inputSearch).toHaveValue('y');
+
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
+
+    userEvent.click(firstLetterRadio);
+    expect(firstLetterRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por firstLetter direto (DRINKS)', () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'z');
+    expect(inputSearch).toHaveValue('z');
+
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
+
+    userEvent.click(firstLetterRadio);
+    expect(firstLetterRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por firstLetter direto (MEALS)', () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'y');
+    expect(inputSearch).toHaveValue('y');
+
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
+
+    userEvent.click(firstLetterRadio);
+    expect(firstLetterRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testando search por firstLetter (MEALS)', () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+    userEvent.click(searchBtn);
+
+    const inputSearch = screen.getByTestId(searchInputId);
+    userEvent.type(inputSearch, 'o');
+    expect(inputSearch).toHaveValue('o');
+
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
+
+    userEvent.click(firstLetterRadio);
+    expect(firstLetterRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+  });
+
+  test('Testa se um Alert aparece quando a API retorna null (MEALS)', async () => {
+    renderWithRouterAndRedux(<App />, '/meals');
+    jest.spyOn(global, 'alert').mockReturnValue(alert);
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+
+    userEvent.click(searchBtn);
+
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
+    userEvent.click(firstLetterRadio);
+    expect(firstLetterRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+
+    expect(global.alert()).toBe(alert);
+  });
+
+  test('Testa se um Alert aparece quando a API retorna null (DRINKS)', async () => {
+    renderWithRouterAndRedux(<App />, '/drinks');
+    jest.spyOn(global, 'alert').mockReturnValue(alert);
+    const searchBtn = screen.getByTestId(searchTopBtnId);
+
+    userEvent.click(searchBtn);
+
+    const firstLetterRadio = screen.getByTestId(firstLetterSearchRadioId);
+    userEvent.click(firstLetterRadio);
+    expect(firstLetterRadio).toBeChecked();
+
+    const searchFilterBtn = screen.getByTestId(searchButtonId);
+    userEvent.click(searchFilterBtn);
+
+    expect(global.alert()).toBe(alert);
+  });
 });
