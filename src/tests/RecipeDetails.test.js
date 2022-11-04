@@ -37,20 +37,6 @@ const mockLocalStorageFavorites = JSON.stringify([
   },
 ]);
 
-const mockLocalStorageDoneRecipes = JSON.stringify([
-  {
-    alcoholicOrNot: 'Alcoholic',
-    category: 'Cocktail',
-    doneDate: '2022-11-04T20:08:11.708Z',
-    id: '178319',
-    image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
-    name: 'Aquamarine',
-    nationality: '',
-    tags: [],
-    type: 'drink',
-  },
-]);
-
 const routeDrinksWithId178319 = '/drinks/178319';
 const routeMealsWithId52771 = '/meals/52771';
 describe('Testa a página de detalhes de receitas', () => {
