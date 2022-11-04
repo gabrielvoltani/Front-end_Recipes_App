@@ -25,4 +25,8 @@ describe('Testa a página de detalhes de receitas', () => {
     expect(recipeInstructions).toBeInTheDocument();
     expect(startRecipeButton).toBeInTheDocument();
   });
+
+  test('02 - ', () => {
+
+  });
 });
