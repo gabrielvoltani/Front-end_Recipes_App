@@ -22,6 +22,8 @@ export const ALL_MEALS = 'ALL_MEALS';
 export const ALL_DRINKS = 'ALL_DRINKS';
 export const GET_MEALS_FILTRED = 'GET_MEALS_FILTRED';
 export const GET_DRINKS_FILTRED = 'GET_DRINKS_FILTRED';
+export const GET_DRINK_IN_PROGRESS = 'GET_DRINK_IN_PROGRESS';
+export const GET_MEAL_IN_PROGRESS = 'GET_MEAL_IN_PROGRESS';
 
 export const isRequesting = () => ({
   type: IS_REQUESTING,
