@@ -18,7 +18,6 @@ import corbaDetails from './corbaDetails';
 import oneDrink from './oneDrink';
 import oneMeal from './oneMeal';
 
-
 export const mockFetch = (url) => Promise.resolve({
   json: () => {
     if (url === 'https://www.themealdb.com/api/json/v1/1/search.php?s=') return Promise.resolve(mockMeals);

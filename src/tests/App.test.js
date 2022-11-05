@@ -479,5 +479,3 @@ describe('Teste da tela receitas em progresso', () => {
     });
   });
 });
-
-
