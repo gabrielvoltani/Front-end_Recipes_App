@@ -6,7 +6,7 @@ import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import App from '../App';
 import Footer from '../components/Footer';
 
-import { mockFetch } from './mocks/fetchRecipes';
+import { mockFetch, mockFetchtwo } from './mocks/fetchRecipes';
 import Profile from '../pages/Profile';
 
 const loginButton = 'login-submit-btn';
@@ -318,9 +318,9 @@ describe('Testes do component Header', () => {
   });
 });
 
-describe('15 - Testando o componente SearchBar', () => {
+describe('Testando o componente SearchBar', () => {
   beforeEach(() => {
-    global.fetch = jest.fn(mockFetch);
+    global.fetch = jest.fn(mockFetchtwo);
   });
   test('Testando se os inputs são renderizados/Botão', () => {
     renderWithRouterAndRedux(<App />, '/meals');
