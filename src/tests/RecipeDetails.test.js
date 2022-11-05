@@ -5,7 +5,7 @@ import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 
 import App from '../App';
 
-import mockFetch from './mocks/fetchRecipes';
+import { mockFetch } from './mocks/fetchRecipes';
 
 const mockLocalStorageInProgress = JSON.stringify({
   drinks: {

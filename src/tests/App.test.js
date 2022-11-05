@@ -6,7 +6,7 @@ import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import App from '../App';
 import Footer from '../components/Footer';
 
-import mockFetch from './mocks/fetchRecipes';
+import { mockFetch, mockFetchtwo } from './mocks/fetchRecipes';
 import Profile from '../pages/Profile';
 
 const loginButton = 'login-submit-btn';
@@ -318,9 +318,9 @@ describe('Testes do component Header', () => {
   });
 });
 
-describe('15 - Testando o componente SearchBar', () => {
+describe('Testando o componente SearchBar', () => {
   beforeEach(() => {
-    global.fetch = jest.fn(mockFetch);
+    global.fetch = jest.fn(mockFetchtwo);
   });
   test('Testando se os inputs são renderizados/Botão', () => {
     renderWithRouterAndRedux(<App />, '/meals');
@@ -479,24 +479,3 @@ describe('Teste da tela receitas em progresso', () => {
     });
   });
 });
-
-// test('Testa se um Alert aparece quando a API retorna null', () => {
-//   renderWithRouterAndRedux(<App />, '/meals');
-//   const searchBtn = screen.getByTestId('search-top-btn');
-
-//   userEvent.click(searchBtn);
-
-//   const inputSearch = screen.getByTestId('search-input');
-//   const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
-//   const nameRadio = screen.getByTestId('name-search-radio');
-//   const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
-//   const searchFilterBtn = screen.getByTestId('exec-search-btn');
-
-//   userEvent.type(inputSearch, 'xablau');
-
-//   userEvent.selectOptions(ingredienteRadio);
-//   userEvent.click(searchFilterBtn);
-
-//   const alertMock = jest.spyOn(window, 'alert');
-// });
-// })

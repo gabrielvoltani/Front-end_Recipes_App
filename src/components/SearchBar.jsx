@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getMealsFiltred, getDrinksFiltred } from '../Redux/Actions';
+import { getMealsFiltred, getDrinksFiltred } from '../redux/actions';
 
 import {
   requestIngredientApi,

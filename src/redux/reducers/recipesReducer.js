@@ -9,7 +9,7 @@ import {
   ALL_DRINKS,
   GET_MEALS_FILTRED,
   GET_DRINKS_FILTRED,
-} from '../Actions';
+} from '../actions';
 
 const INITIAL_STATE = {
   isRequesting: false,

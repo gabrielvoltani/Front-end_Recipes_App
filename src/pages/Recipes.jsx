@@ -7,7 +7,7 @@ import {
   thunkRequestMeals,
   thunkRequestApiFilterByCategoryDrink,
   thunkRequestApiFilterByCategoryMeal,
-} from '../Redux/Actions/index';
+} from '../redux/actions/index';
 import CardFood from '../components/CardFood';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
