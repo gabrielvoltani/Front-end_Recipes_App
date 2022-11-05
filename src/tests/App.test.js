@@ -6,7 +6,7 @@ import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import App from '../App';
 import Footer from '../components/Footer';
 
-import mockFetch from './mocks/fetchRecipes';
+import { mockFetch } from './mocks/fetchRecipes';
 import Profile from '../pages/Profile';
 
 const loginButton = 'login-submit-btn';
@@ -312,44 +312,4 @@ describe('Testes do component Header', () => {
     const favoriteName = screen.getByText(/favorite recipes/i);
     expect(favoriteName).toBeInTheDocument();
   });
-});
-
-describe('15 - Testando o componente SearchBar', () => {
-  test('Testando se os inputs são renderizados/Botão', () => {
-    renderWithRouterAndRedux(<App />, '/meals');
-    const searchBtn = screen.getByTestId('search-top-btn');
-
-    userEvent.click(searchBtn);
-
-    const inputSearch = screen.getByTestId('search-input');
-    const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
-    const nameRadio = screen.getByTestId('name-search-radio');
-    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
-    const searchFilterBtn = screen.getByTestId('exec-search-btn');
-
-    expect(inputSearch).toBeInTheDocument();
-    expect(ingredienteRadio).toBeInTheDocument();
-    expect(nameRadio).toBeInTheDocument();
-    expect(firstLetterRadio).toBeInTheDocument();
-    expect(searchFilterBtn).toBeInTheDocument();
-  });
-  // test('Testa se um Alert aparece quando a API retorna null', () => {
-  //   renderWithRouterAndRedux(<App />, '/meals');
-  //   const searchBtn = screen.getByTestId('search-top-btn');
-
-  //   userEvent.click(searchBtn);
-
-  //   const inputSearch = screen.getByTestId('search-input');
-  //   const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
-  //   const nameRadio = screen.getByTestId('name-search-radio');
-  //   const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
-  //   const searchFilterBtn = screen.getByTestId('exec-search-btn');
-
-  //   userEvent.type(inputSearch, 'xablau');
-
-  //   userEvent.selectOptions(ingredienteRadio);
-  //   userEvent.click(searchFilterBtn);
-
-  //   const alertMock = jest.spyOn(window, 'alert');
-  // });
 });
