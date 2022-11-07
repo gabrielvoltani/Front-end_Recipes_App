@@ -133,36 +133,4 @@ describe('Testando página de Receitas Feitas', () => {
     expect(itemFiltradoAll[0]).toHaveTextContent('Corba');
     expect(itemFiltradoAll[1]).toHaveTextContent('Aquamarine');
   });
-
-  test('04 - Testando botões sem localStorage salvos', () => {
-    Object.defineProperty(global, 'localStorage', { value: {
-      getItem: () => undefined,
-      setItem: () => { },
-    } });
-    renderWithRouterAndRedux(<App />, rotaDoneRecipes);
-    const btnFilters = screen.getAllByTestId(/filter-by-/i);
-    expect(btnFilters).toHaveLength(3);
-    btnFilters.forEach((btn) => {
-      expect(btn).toBeInTheDocument();
-    });
-
-    const foodsWithoutFilters = screen.getAllByTestId(/-horizontal-name/i);
-    expect(foodsWithoutFilters).toHaveLength(2);
-
-    userEvent.click(btnFilters[1]);
-    const itemFiltradoDrink = screen.getAllByTestId(/-horizontal-name/i);
-    expect(itemFiltradoDrink).toHaveLength(1);
-    expect(itemFiltradoDrink[0]).toHaveTextContent('Corba');
-
-    userEvent.click(btnFilters[2]);
-    const itemFiltradoMeal = screen.getAllByTestId(/-horizontal-name/i);
-    expect(itemFiltradoMeal).toHaveLength(1);
-    expect(itemFiltradoMeal[0]).toHaveTextContent('Aquamarine');
-
-    userEvent.click(btnFilters[0]);
-    const itemFiltradoAll = screen.getAllByTestId(/-horizontal-name/i);
-    expect(itemFiltradoAll).toHaveLength(2);
-    expect(itemFiltradoAll[0]).toHaveTextContent('Corba');
-    expect(itemFiltradoAll[1]).toHaveTextContent('Aquamarine');
-  });
 });
