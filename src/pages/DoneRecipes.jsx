@@ -29,19 +29,17 @@ function DoneRecipes({ history }) {
   };
 
   const filterAll = (type) => {
+    const food = JSON.parse(localStorage.getItem('doneRecipes')) || [];
     if (type === 'meal') {
-      const meal = JSON.parse(localStorage.getItem('doneRecipes')) || [];
-      const filterMeal = meal.filter((item) => item.type === 'meal');
+      const filterMeal = food.filter((item) => item.type === 'meal');
       setRecipes(filterMeal);
     }
     if (type === 'drink') {
-      const drink = JSON.parse(localStorage.getItem('doneRecipes')) || [];
-      const filterDrink = drink.filter((item) => item.type === 'drink');
+      const filterDrink = food.filter((item) => item.type === 'drink');
       setRecipes(filterDrink);
     }
     if (type === 'all') {
-      const data = JSON.parse(localStorage.getItem('doneRecipes')) || [];
-      setRecipes(data);
+      setRecipes(food);
     }
   };
 
@@ -84,11 +82,19 @@ function DoneRecipes({ history }) {
               />
             </Link>
 
-            <p
-              data-testid={ `${index}-horizontal-top-text` }
-            >
-              {`${info.nationality} - ${info.category}`}
-            </p>
+            {info.type === 'meal'
+              ? (
+                <p
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  {`${info.nationality} - ${info.category}`}
+                </p>)
+              : (
+                <p
+                  data-testid={ `${index}-horizontal-top-text` }
+                >
+                  {`${info.alcoholicOrNot} - ${info.category}`}
+                </p>)}
 
             <Link to={ `/${info.type}s/${info.id}` }>
               <h2
@@ -98,8 +104,6 @@ function DoneRecipes({ history }) {
 
               </h2>
             </Link>
-
-            <p data-testid={ `${index}-horizontal-top-text` }>{info.alcoholicOrNot}</p>
 
             {info.tags.map((tagName) => (
               <p
@@ -112,8 +116,9 @@ function DoneRecipes({ history }) {
 
             <p data-testid={ `${index}-horizontal-done-date` }>{info.doneDate }</p>
 
-            {shared && <p>Link copied!</p>}
+            {shared && <p data-testid={ `${index}-text-copied` }>Link copied!</p>}
             <button
+              data-testid={ `${index}-share-btn` }
               type="button"
               onClick={ () => copyShareLink(info.type, info.id) }
             >
