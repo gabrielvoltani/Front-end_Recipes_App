@@ -75,7 +75,7 @@ function RecipeDetails(props) {
       fetchDrink();
       fetchMealRecommendations();
     }
-    const favoriteRecipes = getFavoritesRecipes() || [];
+    const favoriteRecipes = getFavoritesRecipes();
     const isFavorite = favoriteRecipes.some((favoriteRecipe) => favoriteRecipe.id === id);
     setFavorite(isFavorite);
   // eslint-disable-next-line react-hooks/exhaustive-deps

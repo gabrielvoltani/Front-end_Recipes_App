@@ -17,15 +17,15 @@ function CardFavoriteFood({ recipe, index, setChangeFavorite }) {
   };
 
   const handleClickShare = () => {
-    const THREE_SECONDS = 3000;
+    // const THREE_SECONDS = 3000;
     copy(`http://localhost:3000/${recipe.type}s/${recipe.id}`);
     setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, THREE_SECONDS);
+    // setTimeout(() => {
+    //   setCopied(false);
+    // }, THREE_SECONDS);
   };
 
-  const recipeFavorites = getFavoritesRecipes() || [];
+  const recipeFavorites = getFavoritesRecipes();
   return (
     <div>
       <Link to={ `/${recipe.type}s/${recipe.id}` }>

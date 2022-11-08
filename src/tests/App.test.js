@@ -6,7 +6,7 @@ import { renderWithRouterAndRedux } from './helpers/renderWithRouterAndRedux';
 import App from '../App';
 import Footer from '../components/Footer';
 
-import { mockFetch, mockFetchtwo } from './mocks/fetchRecipes';
+import { mockFetch } from './mocks/fetchRecipes';
 import Profile from '../pages/Profile';
 
 const loginButton = 'login-submit-btn';
@@ -318,30 +318,6 @@ describe('Testes do component Header', () => {
   });
 });
 
-describe('Testando o componente SearchBar', () => {
-  beforeEach(() => {
-    global.fetch = jest.fn(mockFetchtwo);
-  });
-  test('Testando se os inputs são renderizados/Botão', () => {
-    renderWithRouterAndRedux(<App />, '/meals');
-    const searchBtn = screen.getByTestId('search-top-btn');
-
-    userEvent.click(searchBtn);
-
-    const inputSearch = screen.getByTestId('search-input');
-    const ingredienteRadio = screen.getByTestId('ingredient-search-radio');
-    const nameRadio = screen.getByTestId('name-search-radio');
-    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
-    const searchFilterBtn = screen.getByTestId('exec-search-btn');
-
-    expect(inputSearch).toBeInTheDocument();
-    expect(ingredienteRadio).toBeInTheDocument();
-    expect(nameRadio).toBeInTheDocument();
-    expect(firstLetterRadio).toBeInTheDocument();
-    expect(searchFilterBtn).toBeInTheDocument();
-  });
-});
-
 describe('Teste da tela receitas em progresso', () => {
   Object.defineProperty(navigator, 'clipboard', {
     value: {
@@ -454,13 +430,44 @@ describe('Teste da tela receitas em progresso', () => {
       expect(instructions[0]).toHaveClass('checked');
       expect(finishRecipeBtn).not.toBeDisabled();
 
-      window.location.reload();
+      expect(instructions[0]).toHaveClass('checked');
+
+      userEvent.click(finishRecipeBtn);
+
+      expect(history.location.pathname).toBe(doneRecipes);
+
+      history.push(urlPathInProgressMeal);
+
+      userEvent.click(finishRecipeBtn);
+    });
+  });
+
+  test('04 - Testando o funcionamento do checkbox', async () => {
+    const { history } = renderWithRouterAndRedux(<App />, urlPathInProgressDrink);
+    const { pathname } = history.location;
+    expect(pathname).toBe(urlPathInProgressDrink);
+
+    await waitFor(() => {
+      const instructions = screen.getAllByTestId(/-ingredient-step/i);
+      expect(instructions).toHaveLength(3);
+
+      const finishRecipeBtn = screen.getByTestId('finish-recipe-btn');
+      expect(finishRecipeBtn).toBeDisabled();
+      instructions.forEach((instruction) => {
+        userEvent.click(instruction);
+      });
+      expect(instructions[0]).toHaveClass('checked');
+      expect(finishRecipeBtn).not.toBeDisabled();
 
       expect(instructions[0]).toHaveClass('checked');
 
       userEvent.click(finishRecipeBtn);
 
       expect(history.location.pathname).toBe(doneRecipes);
+
+      history.push(urlPathInProgressMeal);
+
+      userEvent.click(finishRecipeBtn);
     });
   });
 

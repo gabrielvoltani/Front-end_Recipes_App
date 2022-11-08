@@ -21,7 +21,7 @@ function ChecklistRecipe({ id, infoFood, type, history }) {
   useEffect(() => {
     if (savedInstruction.instruction) {
       managerInProgressRecipes(instructionsMade, type, id, savedInstruction.instruction);
-      setArrayOfInstructions(getInProgressRecipes()[type][id] || []);
+      setArrayOfInstructions([...getInProgressRecipes()[type][id]]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedInstruction]);

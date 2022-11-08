@@ -18,7 +18,7 @@ function RecipeInProgress({ history }) {
   const id = pathname.split('/')[2];
 
   useEffect(() => {
-    const recipesSaveds = getFavoritesRecipes() || [];
+    const recipesSaveds = getFavoritesRecipes();
     const key = pathname.includes('drinks') ? 'idDrink' : 'idMeal';
     const isFavorited = recipesSaveds
       .some((rec) => rec.id === recipe[key]);
@@ -51,13 +51,13 @@ function RecipeInProgress({ history }) {
   }, []);
 
   const handleClickShare = () => {
-    const THREE_SECONDS = 3000;
+    // const THREE_SECONDS = 3000;
     const path = pathname.split('/in')[0];
     copy(`http://localhost:3000${path}`);
     setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, THREE_SECONDS);
+    // setTimeout(() => {
+    //   setCopied(false);
+    // }, THREE_SECONDS);
   };
 
   const handleClickFavorite = () => {

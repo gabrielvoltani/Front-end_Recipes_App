@@ -23,7 +23,7 @@ const mockLocalStorage = JSON.stringify([
   },
   {
     alcoholicOrNot: 'Alcoholic',
-    category: 'Cocktail',
+    category: '',
     doneDate: dateDrink,
     id: '178319',
     image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
@@ -62,7 +62,7 @@ describe('Testando página de Receitas Feitas', () => {
     const drinkName = screen.getByTestId('1-horizontal-name');
     expect(drinkName).toHaveTextContent('Aquamarine');
     const drinkNationalityAndIsAlcoholic = screen.getByTestId('1-horizontal-top-text');
-    expect(drinkNationalityAndIsAlcoholic).toHaveTextContent('Alcoholic - Cocktail');
+    expect(drinkNationalityAndIsAlcoholic).toHaveTextContent('Alcoholic -');
     const drinkImage = screen.getByTestId('1-horizontal-image');
     expect(drinkImage).toHaveProperty('src', 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg');
     expect(drinkImage).toHaveProperty('alt', 'Aquamarine');

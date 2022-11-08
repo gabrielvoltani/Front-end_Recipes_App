@@ -147,9 +147,11 @@ describe('Testa a página de detalhes de receitas', () => {
     } });
     renderWithRouterAndRedux(<App />, routeMealsWithId52771);
     expect(fetch).toHaveBeenCalled();
-    await waitFor(() => {
+    await waitFor(async () => {
       const title = screen.getByText('Spicy Arrabiata Penne');
       expect(title).toBeInTheDocument();
+      const button = await screen.findByText('Continue Recipe');
+      expect(button).toBeInTheDocument();
     });
   });
 });

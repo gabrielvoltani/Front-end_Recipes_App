@@ -75,7 +75,6 @@ function SearchBar({ pathname, dispatch }) {
         }
         return dispatchSeachFIlterMeals(result);
       }
-      console.log('oi');
       return global.alert('Your search must have only 1 (one) character');
     }
   };

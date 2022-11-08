@@ -12,7 +12,7 @@ function FavoriteRecipes({ history }) {
   const [actualFilter, setActualFilter] = useState('All');
 
   useEffect(() => {
-    const recipesSaveds = getFavoritesRecipes() || [];
+    const recipesSaveds = getFavoritesRecipes();
     setFavoritesRecipes(recipesSaveds);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changeFavorite]);
@@ -23,7 +23,7 @@ function FavoriteRecipes({ history }) {
       const filteredRecipes = recipesSaveds.filter((rec) => rec.type === actualFilter);
       setFavoritesRecipes(filteredRecipes);
     } else {
-      const recipesSaveds = getFavoritesRecipes() || [];
+      const recipesSaveds = getFavoritesRecipes();
       setFavoritesRecipes(recipesSaveds);
     }
   };
