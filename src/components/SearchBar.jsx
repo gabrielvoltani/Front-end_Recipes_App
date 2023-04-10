@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getMealsFiltred, getDrinksFiltred } from '../Redux/Actions';
+import { getMealsFiltred, getDrinksFiltred } from '../redux/actions';
 
 import {
   requestIngredientApi,
@@ -75,7 +75,6 @@ function SearchBar({ pathname, dispatch }) {
         }
         return dispatchSeachFIlterMeals(result);
       }
-      console.log('oi');
       return global.alert('Your search must have only 1 (one) character');
     }
   };

@@ -9,7 +9,7 @@ import {
   ALL_DRINKS,
   GET_MEALS_FILTRED,
   GET_DRINKS_FILTRED,
-} from '../Actions';
+} from '../actions';
 
 const INITIAL_STATE = {
   isRequesting: false,
@@ -20,6 +20,8 @@ const INITIAL_STATE = {
   categoriesMeals: [],
   categoriesDrinks: [],
   isFiltering: false,
+  recipeDrinkInProgress: {},
+  recipeMealInProgress: {},
 };
 
 function recipes(state = INITIAL_STATE, { payload, type }) {
@@ -28,42 +30,30 @@ function recipes(state = INITIAL_STATE, { payload, type }) {
     return { ...state, isRequesting: true };
   case GET_LIST_CATEGORIES_DRINKS:
     return {
-      ...state,
-      categoriesDrinks: payload,
-      isRequesting: false,
+      ...state, categoriesDrinks: payload, isRequesting: false,
     };
   case GET_LIST_CATEGORIES_MEALS:
     return {
-      ...state,
-      categoriesMeals: payload,
-      isRequesting: false,
+      ...state, categoriesMeals: payload, isRequesting: false,
     };
   case GET_DRINKS:
     return {
-      ...state,
-      drinks: payload,
-      isRequesting: false,
+      ...state, drinks: payload, isRequesting: false,
     };
   case GET_MEALS:
     return {
-      ...state,
-      meals: payload,
-      isRequesting: false,
+      ...state, meals: payload, isRequesting: false,
     };
   case IS_FILTERING:
     return {
       ...state, isFiltering: !state.isFiltering };
   case ALL_MEALS:
     return {
-      ...state,
-      mealsWhithoutFilters: payload,
-      isRequesting: false,
+      ...state, mealsWhithoutFilters: payload, isRequesting: false,
     };
   case ALL_DRINKS:
     return {
-      ...state,
-      drinksWhithoutFilters: payload,
-      isRequesting: false,
+      ...state, drinksWhithoutFilters: payload, isRequesting: false,
     };
   case GET_MEALS_FILTRED:
     return { ...state, meals: payload };
