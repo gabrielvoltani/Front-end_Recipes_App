@@ -1,10 +1,19 @@
-# :construction: README em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto.
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+# Front-end Recipes App
+
+This project is a front-end web application built with React that allows users to browse and search for recipes.
+
+## Features
+
+- Users can browse and search for recipes by keyword, ingredient, and category.
+- Users can filter recipes by diet, meal type, and cuisine.
+- Users can view recipe details, including ingredients, instructions, and nutritional information.
+- Users can save recipes to their favorites for easy access later.
+- Users can create an account and log in to access their saved recipes across devices.
+
+## Technologies
+
+- React
+- React Router
+- Redux
+
+
